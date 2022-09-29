@@ -4,6 +4,7 @@ from sys import exit
 import tkinter as tk
 import sqlite3
 from random import randint
+import math
 
 # functions/methods
 
@@ -622,7 +623,7 @@ pygame.display.set_caption('Speech Game')
 clock = pygame.time.Clock()
 
 # set the game_state to decide a game
-game_state = 'cariboo_finished'
+game_state = 'cariboo_init'
 game_phase = 'ball'
 ball_list = []
 balls_found_list = []
@@ -643,7 +644,8 @@ circle_2_rect = circle_2_image_transform.get_rect(center = (screen.get_width() *
 circle_3_rect = circle_3_image_transform.get_rect(center = (screen.get_width() * 0.71, screen.get_height() * 0.12))
 
 # import font
-cariboo_font = pygame.font.Font('fonts/cariboo/LuckiestGuy-Regular.ttf', int(screen.get_width() * 0.03))
+# cariboo_font = pygame.font.Font('fonts/cariboo/LuckiestGuy-Regular.ttf', int(screen.get_width() * 0.03))
+cariboo_font = pygame.font.Font('fonts/pixel/Pixeltype.ttf', int(screen.get_width() * 0.03))
 game_title = cariboo_font.render('Cariboo', True, (233,169,21))
 game_title_rect = game_title.get_rect(center = (screen.get_width() * 0.57, screen.get_height() * 0.13))
 up_text = cariboo_font.render('Up', True, (185,136,235))
@@ -674,6 +676,14 @@ three_2_image = pygame.image.load(words_and_paths[11][1]).convert_alpha()
 three_3_image = pygame.image.load(words_and_paths[12][1]).convert_alpha()
 three_4_image = pygame.image.load(words_and_paths[13][1]).convert_alpha()
 three_5_image = pygame.image.load(words_and_paths[14][1]).convert_alpha()
+
+# background image for cariboo
+cariboo_background_1 = pygame.image.load('graphics/backgrounds/platformer_background_4/background_cariboo.png').convert()
+cariboo_background_2 = pygame.image.load('graphics/backgrounds/platformer_background_4/background_cariboo_2.png').convert()
+cariboo_background_3 = pygame.image.load('graphics/backgrounds/platformer_background_4/background_cariboo_3.png').convert()
+cariboo_background_1 = pygame.transform.scale(cariboo_background_1, (screen.get_width(), screen.get_height()))
+cariboo_background_2 = pygame.transform.scale(cariboo_background_2, (screen.get_width(), screen.get_height()))
+cariboo_background_3 = pygame.transform.scale(cariboo_background_3, (screen.get_width(), screen.get_height()))
 
 # transforms for all card images
 def images_and_rect_trans():
@@ -813,12 +823,14 @@ def ball_animation_init():
     global ball_3_animation
     global ball_4_animation
     global chest_animation
+    global background_animation
 
     ball_1_animation = 0
     ball_2_animation = 0
     ball_3_animation = 0
     ball_4_animation = 0
     chest_animation = 0
+    background_animation = 0
 
 # rects for card images
 images_and_rect_trans()
@@ -939,9 +951,23 @@ while True:
 
 
     if game_state == 'cariboo':
-        screen.fill((94,129,162))
-        pygame.draw.rect(screen, 'Yellow', main_board)
-        pygame.draw.rect(screen, 'Blue', blue_ball_area)
+        # screen.fill((94,129,162))
+        screen.blit(cariboo_background_1, (0, 0))
+        # if background_animation < 1:
+        #     screen.blit(cariboo_background_1, (0, 0))
+        #     background_animation += 0.03
+        # elif background_animation > 3:
+        #     screen.blit(cariboo_background_3, (0,0))
+        #     background_animation = 0
+        # elif background_animation > 2:
+        #     screen.blit(cariboo_background_3, (0,0))
+        #     background_animation += 0.03
+        # elif background_animation > 1:
+        #     screen.blit(cariboo_background_2, (0, 0))
+        #     background_animation += 0.03
+        pygame.draw.rect(screen, 'Yellow', main_board, 0, 20)
+        pygame.draw.rect(screen, 'Blue', blue_ball_area, 0, 20)
+        
         # pygame.draw.circle(screen, 'Black', (screen.get_width() * 0.15, screen.get_height() * 0.12), 50)
         screen.blit(circle_1_image_transform, circle_1_rect)
         screen.blit(circle_2_image_transform, circle_2_rect)

@@ -602,7 +602,7 @@ def move_found_balls(name, pos):
 # connect to database
 conn = sqlite3.connect('words_database/words-database.db')
 c = conn.cursor()
-c.execute('SELECT * FROM a_initial')
+c.execute('SELECT * FROM e_initial')
 words_and_paths = c.fetchall()
 conn.close()
 
@@ -616,6 +616,7 @@ screen_height = root.winfo_screenheight()
 
 
 # set display size
+# screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
 screen = pygame.display.set_mode((screen_width * 0.90, screen_height * 0.90), pygame.RESIZABLE)
 pygame.display.set_caption('Speech Game')
 
@@ -967,7 +968,7 @@ while True:
         # elif background_animation > 1:
         #     screen.blit(cariboo_background_2, (0, 0))
         #     background_animation += 0.03
-        pygame.draw.rect(screen, 'Blue', blue_ball_area, 0, 20)
+        pygame.draw.rect(screen, (38, 121, 163), blue_ball_area, 0, 20)
         pygame.draw.rect(screen, 'Yellow', main_board, 0, 20)
 
         # draw black rects behind flash cards. This is purely for asthetic reasons

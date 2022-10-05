@@ -5,7 +5,7 @@ conn = sqlite3.connect('words-database.db')
 c = conn.cursor()
 
 c.execute("""
-    CREATE TABLE a_initial (
+    CREATE TABLE e_initial (
         word text,
         path text
     )
@@ -16,27 +16,27 @@ print('Table successfully created')
 # conn.commit()
 
 many_words = [
-    ('Acorn', 'words_database/a-initial/acorn.png'),
-    ('Alligator', 'words_database/a-initial/alligator.png'),
-    ('Angel', 'words_database/a-initial/angel.png'),
-    ('Antlers', 'words_database/a-initial/antlers.png'),
-    ('Arrow', 'words_database/a-initial/arrow.png'),
-    ('Adult', 'words_database/a-initial/adult.png'),
-    ('Alphabet', 'words_database/a-initial/alphabet.png'),
-    ('Angry', 'words_database/a-initial/angry.png'),
-    ('Ape', 'words_database/a-initial/ape.png'),
-    ('Astronaut', 'words_database/a-initial/astronaut.png'),
-    ('Airplane', 'words_database/a-initial/airplane.png'),
-    ('Ambulance', 'words_database/a-initial/ambulance.png'),
-    ('Ant', 'words_database/a-initial/ant.png'),
-    ('Apple', 'words_database/a-initial/apple.png'),
-    ('Axe', 'words_database/a-initial/axe.png')
+    ('Eagle', 'words_database/e-initial/eagle.png'),
+    ('Ear', 'words_database/e-initial/ear.png'),
+    ('Earth', 'words_database/e-initial/earth.png'),
+    ('Echidna', 'words_database/e-initial/echidna.png'),
+    ('Echo', 'words_database/e-initial/echo.png'),
+    ('Egg', 'words_database/e-initial/egg.png'),
+    ('Eggplant', 'words_database/e-initial/eggplant.png'),
+    ('Eight', 'words_database/e-initial/eight.png'),
+    ('Elephant', 'words_database/e-initial/elephant.png'),
+    ('Elevator', 'words_database/e-initial/elevator.png'),
+    ('Eleven', 'words_database/e-initial/eleven.png'),
+    ('Elk', 'words_database/e-initial/elk.png'),
+    ('End', 'words_database/e-initial/end.png'),
+    ('Eraser', 'words_database/e-initial/eraser.png'),
+    ('Exit', 'words_database/e-initial/exit.png')
 ]
 
-c.executemany("INSERT INTO a_initial VALUES (?,?)", many_words)
+c.executemany("INSERT INTO e_initial VALUES (?,?)", many_words)
 print('words and paths successfully added to database')
 
 conn.commit()
-print('finishec commiting changes')
+print('finished commiting changes')
 conn.close()
 print('closing connection')

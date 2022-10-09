@@ -1,3 +1,4 @@
+from fileinput import close
 import pygame
 from pygame import gfxdraw
 from sys import exit
@@ -12,6 +13,8 @@ def restart_cariboo():
     global ball_list
     global balls_found_list
     global game_state
+    global chest_animation_state
+    global fade_in_animation
 
     global ball_1_rect_list
     global ball_2_rect_list
@@ -28,6 +31,8 @@ def restart_cariboo():
     set_flash_state()
     set_flash_animation_state()
     ball_animation_init()
+    chest_animation_state = 'not_finished'
+    fade_in_animation = 'not_finished'
     game_state = 'cariboo'
     print(ball_list)
 
@@ -599,6 +604,75 @@ def move_found_balls(name, pos):
     elif len(balls_found_list) == 4:
         print('all balls found')
 
+def initiate_menu_buttons():
+    global back_button
+    global back_button_rect
+    global close_button
+    global close_button_rect
+
+    back_button = pygame.image.load('graphics/buttons/backward_btn.png')
+    close_button = pygame.image.load('graphics/buttons/close_btn.png')
+
+    back_button = pygame.transform.scale(back_button, (screen.get_width() * 0.03, screen.get_height() * 0.06))
+    close_button = pygame.transform.scale(close_button, (screen.get_width() * 0.03, screen.get_height() * 0.06))
+
+    back_button_rect = back_button.get_rect(topleft = (screen.get_width() * 0.01, screen.get_height() * 0.01))
+    close_button_rect = close_button.get_rect(topright = (screen.get_width() - (screen.get_width() * 0.01) , screen.get_height() * 0.01))
+
+def image_zoom(img, rect):
+    global chest_animation_state
+    global chest_closed_zoom
+    global chest_closed_zoom_rect
+
+    global chest_ajar_zoom
+    global chest_ajar_zoom_rect
+
+    global chest_open_zoom
+    global chest_open_zoom_rect
+
+    chest_closed_zoom = 0
+    chest_closed_zoom_rect = 0
+
+    for each in range(300):
+        chest_closed_zoom = pygame.transform.scale(img, (screen.get_width() * (each / 500), screen.get_height() * (each / 500)))
+        chest_closed_zoom_rect = chest_closed_zoom.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.5))
+
+        screen.blit(chest_closed_zoom, chest_closed_zoom_rect)
+        pygame.display.update()
+        pygame.time.delay(1)
+    
+    chest_ajar_zoom = pygame.transform.scale(chest_ajar_image, (chest_closed_zoom.get_width(), chest_closed_zoom.get_height()))
+    chest_open_zoom = pygame.transform.scale(chest_open_image, (chest_closed_zoom.get_width(), chest_closed_zoom.get_height()))
+    chest_ajar_zoom_rect = chest_ajar_zoom.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.5))
+    chest_open_zoom_rect = chest_open_zoom.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.5))
+
+    chest_animation_state = 'finished'
+
+def chest_open():
+    global chest_animation
+
+    chest_animation += 0.02
+
+def fade_in():
+    global fade_in_animation
+
+    fade = pygame.Surface((screen.get_width(), screen.get_height()))
+    fade.fill((94,129,162))
+
+    for alpha in range(0, 200):
+        if alpha <= 100:
+            fade.set_alpha(alpha)
+            screen.blit(fade, (0,0))
+            pygame.display.update()
+            pygame.time.delay(10)
+        else:
+            fade.set_alpha(alpha)
+            screen.blit(fade, (0,0))
+            pygame.display.update()
+            pygame.time.delay(1)
+    
+    fade_in_animation = 'finished'
+
 # connect to database
 # conn = sqlite3.connect('words_database/words-database.db')
 # c = conn.cursor()
@@ -623,6 +697,7 @@ def initialize_cariboo():
     set_flash_state()
     set_flash_animation_state()
     ball_animation_init()
+    restart_cariboo()
 
 # init the game
 pygame.init()
@@ -634,7 +709,20 @@ screen_height = root.winfo_screenheight()
 
 
 # set display size
-screen = pygame.display.set_mode((1920, 1080))
+if screen_height == 1440:
+    screen = pygame.display.set_mode((2560, 1440))
+if screen_height == 2160:
+    screen = pygame.display.set_mode((3840, 2160))
+if screen_height == 1080:
+    screen = pygame.display.set_mode((1920, 1080))
+if screen_height == 720:
+    screen = pygame.display.set_mode((1280, 720))
+if screen_height == 480:
+    screen = pygame.display.set_mode((854, 480))
+if screen_height == 360:
+    screen = pygame.display.set_mode((640, 360))
+if screen_height == 240:
+    screen = pygame.display.set_mode((426, 240))
 # screen = pygame.display.set_mode((screen_width * 0.90, screen_height * 0.90), pygame.RESIZABLE)
 pygame.display.set_caption('Speech Game')
 
@@ -646,6 +734,8 @@ game_state = 'cariboo_init'
 game_phase = 'ball'
 ball_list = []
 balls_found_list = []
+chest_animation_state = 'not_finished'
+fade_in_animation = 'not_finished'
 
 # main board rect
 main_board = pygame.Rect((screen.get_width() * 0.05, screen.get_height() * 0.05), (screen.get_width() * 0.78, screen.get_height() * 0.90))
@@ -671,10 +761,10 @@ up_text = pixel_font_med.render('Up', True, (185,136,235))
 up_text_rect = up_text.get_rect(center = (screen.get_width() * 0.32, screen.get_height() * 0.13))
 
 pixel_font_large = pygame.font.Font('fonts/pixel/Pixeltype.ttf', int(screen.get_width() * 0.05))
-restart_text = pixel_font_large.render('Restart', False, (255,255,255))
-game_text = pixel_font_large.render('Game', False, (255,255,255))
-restart_text_rect = restart_text.get_rect(center = (screen.get_width() * 0.50, screen.get_height() * 0.47))
-game_text_rect = game_text.get_rect(center = (screen.get_width() * 0.50, screen.get_height() * 0.54))
+restart_text = pixel_font_large.render('Push to Restart', False, (255,255,255))
+win_text = pixel_font_large.render('Congratulations! You Found All the Balls!', False, (255,255,255))
+restart_text_rect = restart_text.get_rect(center = (screen.get_width() * 0.50, screen.get_height() * 0.80))
+win_text_rect = win_text.get_rect(center = (screen.get_width() * 0.50, screen.get_height() * 0.20))
 
 step_text = pixel_font_med.render('Step', True, (117,198,184))
 step_text_rect = step_text.get_rect(center = (screen.get_width() * 0.27, screen.get_height() * 0.13))
@@ -814,10 +904,15 @@ def images_and_rect_trans():
 def chest_update():
     global chest_image_trans
     global chest_image_rect
+    global chest_ajar_image
     global chest_ajar_trans
     global chest_ajar_rect
+    global chest_open_image
     global chest_open_trans
     global chest_open_rect
+
+    global chest_image_finished
+    global chest_image_finished_rect
 
     # original value for transform was screen.get_width() * 0.07, screen.get_height * 0.11
     chest_image = pygame.image.load('graphics/neutral/chest_closed.png').convert_alpha()
@@ -831,6 +926,9 @@ def chest_update():
     chest_open_image = pygame.image.load('graphics/neutral/chest_open.png').convert_alpha()
     chest_open_trans = pygame.transform.scale(chest_open_image, (screen.get_width() * 0.10, screen.get_height() * 0.15))
     chest_open_rect = chest_open_trans.get_rect(center = (screen.get_width() * 0.89, screen.get_height() * 0.13))
+
+    chest_image_finished = pygame.transform.scale(chest_image, (screen.get_width() * 0.50, screen.get_height() * 0.53))
+    chest_image_finished_rect = chest_image_finished.get_rect(center = (screen.get_width() * 0.50, screen.get_height() * 0.50))
 
 def ball_update():
     global ball_1_trans
@@ -906,14 +1004,16 @@ def button_images():
     blue_button = pygame.image.load('graphics/buttons/blue_button.png').convert_alpha()
     blue_button = pygame.transform.scale(blue_button, (screen.get_width() * 0.10, screen.get_height() * 0.10))
 
-    a_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.07, screen.get_height() * 0.10))
-    b_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.21, screen.get_height() * 0.10))
-    c_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.35, screen.get_height() * 0.10))
-    d_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.49, screen.get_height() * 0.10))
-    e_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.63, screen.get_height() * 0.10))
-    f_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.77, screen.get_height() * 0.10))
-    g_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.91, screen.get_height() * 0.10))
-    h_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.07, screen.get_height() * 0.25))
+    button_height_position = 0.13
+
+    a_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.07, screen.get_height() * button_height_position))
+    b_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.21, screen.get_height() * button_height_position))
+    c_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.35, screen.get_height() * button_height_position))
+    d_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.49, screen.get_height() * button_height_position))
+    e_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.63, screen.get_height() * button_height_position))
+    f_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.77, screen.get_height() * button_height_position))
+    g_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.91, screen.get_height() * button_height_position))
+    h_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.07, screen.get_height() * (button_height_position + 0.15)))
 
     letter_selection = pixel_font_large.render('SELECT A LETTER', False, 'White')
     letter_selection_rect = letter_selection.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.04))
@@ -929,6 +1029,7 @@ def button_images():
 # rects for card images
 
 button_images()
+initiate_menu_buttons()
 
 while True:
 
@@ -937,35 +1038,35 @@ while True:
             pygame.quit()
             exit()
         
-        if event.type == pygame.VIDEORESIZE:
-            screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-            main_board = pygame.Rect((screen.get_width() * 0.05, screen.get_height() * 0.05), (screen.get_width() * 0.90, screen.get_height() * 0.90))
-            blue_ball_area = pygame.Rect((screen.get_width() * 0.80, screen.get_height() * 0.05), (screen.get_width() * 0.15, screen.get_height() * 0.90))
-            # resize circles
-            circle_1_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.08))
-            circle_2_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.08))
-            circle_3_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.08))
+        # if event.type == pygame.VIDEORESIZE:
+        #     screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+        #     main_board = pygame.Rect((screen.get_width() * 0.05, screen.get_height() * 0.05), (screen.get_width() * 0.90, screen.get_height() * 0.90))
+        #     blue_ball_area = pygame.Rect((screen.get_width() * 0.80, screen.get_height() * 0.05), (screen.get_width() * 0.15, screen.get_height() * 0.90))
+        #     # resize circles
+        #     circle_1_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.08))
+        #     circle_2_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.08))
+        #     circle_3_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.08))
 
-            # re-position rects
-            circle_1_rect = circle_1_image_transform.get_rect(center = (screen.get_width() * 0.15, screen.get_height() * 0.12))
-            circle_2_rect = circle_2_image_transform.get_rect(center = (screen.get_width() * 0.43, screen.get_height() * 0.12))
-            circle_3_rect = circle_3_image_transform.get_rect(center = (screen.get_width() * 0.71, screen.get_height() * 0.12))
+        #     # re-position rects
+        #     circle_1_rect = circle_1_image_transform.get_rect(center = (screen.get_width() * 0.15, screen.get_height() * 0.12))
+        #     circle_2_rect = circle_2_image_transform.get_rect(center = (screen.get_width() * 0.43, screen.get_height() * 0.12))
+        #     circle_3_rect = circle_3_image_transform.get_rect(center = (screen.get_width() * 0.71, screen.get_height() * 0.12))
 
-            # resize title text
-            cariboo_font = pygame.font.Font('fonts/cariboo/LuckiestGuy-Regular.ttf', int(screen.get_width() * 0.03))
-            game_title = cariboo_font.render('Cariboo', True, (233,169,21))
-            game_title_rect = game_title.get_rect(center = (screen.get_width() * 0.57, screen.get_height() * 0.13))
+        #     # resize title text
+        #     cariboo_font = pygame.font.Font('fonts/cariboo/LuckiestGuy-Regular.ttf', int(screen.get_width() * 0.03))
+        #     game_title = cariboo_font.render('Cariboo', True, (233,169,21))
+        #     game_title_rect = game_title.get_rect(center = (screen.get_width() * 0.57, screen.get_height() * 0.13))
 
-            up_text = cariboo_font.render('Up', True, (185,136,235))
-            up_text_rect = up_text.get_rect(center = (screen.get_width() * 0.32, screen.get_height() * 0.13))
+        #     up_text = cariboo_font.render('Up', True, (185,136,235))
+        #     up_text_rect = up_text.get_rect(center = (screen.get_width() * 0.32, screen.get_height() * 0.13))
 
-            step_text = cariboo_font.render('Step', True, (117,198,184))
-            step_text_rect = step_text.get_rect(center = (screen.get_width() * 0.27, screen.get_height() * 0.13))
+        #     step_text = cariboo_font.render('Step', True, (117,198,184))
+        #     step_text_rect = step_text.get_rect(center = (screen.get_width() * 0.27, screen.get_height() * 0.13))
 
-            # resize all flash cards
-            images_and_rect_trans()
-            chest_update()
-            ball_update()
+        #     # resize all flash cards
+        #     images_and_rect_trans()
+        #     chest_update()
+        #     ball_update()
         
         if event.type == pygame.MOUSEBUTTONDOWN:
             # Collider for inserting balls to the top circles
@@ -1034,9 +1135,12 @@ while True:
                 
                 # collider to restart game
             if game_state == 'cariboo_finished':
-                if restart_button_rect.collidepoint(event.pos):
+                if restart_button_rect.collidepoint(event.pos) and chest_animation >= 2:
                     print('game restarting')
                     restart_cariboo()
+                if chest_animation_state == 'finished':
+                    if chest_closed_zoom_rect.collidepoint(event.pos) and chest_animation == 0:
+                        chest_open()
 
             if game_state == 'cariboo_init':
                 if a_button_rect.collidepoint(event.pos):
@@ -1079,25 +1183,33 @@ while True:
                     initialize_cariboo()
                     game_state = 'cariboo'
 
+            if game_state != 'main_menu':
+                if close_button_rect.collidepoint(event.pos):
+                    pygame.quit()
+                    exit()
+
+                if back_button_rect.collidepoint(event.pos):
+                    game_state = 'cariboo_init'
+
     if game_state == 'cariboo_init':
         screen.fill((94,129,162))
         screen.blit(letter_selection, letter_selection_rect)
         screen.blit(blue_button, a_button_rect)
-        screen.blit(a_letter, (screen.get_width() * 0.06, screen.get_height() * 0.075))
+        screen.blit(a_letter, (screen.get_width() * 0.06, screen.get_height() * 0.1))
         screen.blit(blue_button, b_button_rect)
-        screen.blit(b_letter, (screen.get_width() * 0.20, screen.get_height() * 0.075))
+        screen.blit(b_letter, (screen.get_width() * 0.20, screen.get_height() * 0.1))
         screen.blit(blue_button, c_button_rect)
-        screen.blit(c_letter, (screen.get_width() * 0.34, screen.get_height() * 0.075))
+        screen.blit(c_letter, (screen.get_width() * 0.34, screen.get_height() * 0.1))
         screen.blit(blue_button, d_button_rect)
-        screen.blit(d_letter, (screen.get_width() * 0.48, screen.get_height() * 0.075))
+        screen.blit(d_letter, (screen.get_width() * 0.48, screen.get_height() * 0.1))
         screen.blit(blue_button, e_button_rect)
-        screen.blit(e_letter, (screen.get_width() * 0.62, screen.get_height() * 0.075))
+        screen.blit(e_letter, (screen.get_width() * 0.62, screen.get_height() * 0.1))
         screen.blit(blue_button, f_button_rect)
-        screen.blit(f_letter, (screen.get_width() * 0.76, screen.get_height() * 0.075))
+        screen.blit(f_letter, (screen.get_width() * 0.76, screen.get_height() * 0.1))
         screen.blit(blue_button, g_button_rect)
-        screen.blit(g_letter, (screen.get_width() * 0.90, screen.get_height() * 0.075))
+        screen.blit(g_letter, (screen.get_width() * 0.90, screen.get_height() * 0.1))
         screen.blit(blue_button, h_button_rect)
-        screen.blit(h_letter, (screen.get_width() * 0.06, screen.get_height() * 0.225))
+        screen.blit(h_letter, (screen.get_width() * 0.06, screen.get_height() * 0.255))
 
 
     if game_state == 'cariboo':
@@ -1227,12 +1339,13 @@ while True:
         # chest
         if len(balls_found_list) < 4: screen.blit(chest_image_trans, chest_image_rect)
         if len(balls_found_list) == 4:
-            if chest_animation <= 1:
-                chest_animation += 0.02
-                screen.blit(chest_ajar_trans, chest_ajar_rect)
-            if chest_animation > 1:
-                screen.blit(chest_open_trans, chest_open_rect)
-                game_state = 'cariboo_finished'
+            # if chest_animation <= 1:
+            #     chest_animation += 0.02
+            #     screen.blit(chest_ajar_trans, chest_ajar_rect)
+            # if chest_animation > 1:
+            #     screen.blit(chest_open_trans, chest_open_rect)
+            screen.blit(chest_image_trans, chest_image_rect)
+            game_state = 'cariboo_finished'
 
         # animate the balls going into the holes
         try:   
@@ -1290,9 +1403,32 @@ while True:
         except: pass
 
     if game_state == 'cariboo_finished':
-        screen.blit(restart_button_image, restart_button_rect)
-        screen.blit(restart_text, restart_text_rect)
-        screen.blit(game_text, game_text_rect)
+        # screen.blit(restart_button_image, restart_button_rect)
+        # screen.blit(restart_text, restart_text_rect)
+        # screen.blit(game_text, game_text_rect)
+        if fade_in_animation != 'finished':
+            fade_in()
+
+        screen.blit(win_text, win_text_rect)
+
+        if chest_animation_state != 'finished':
+            image_zoom(chest_image_finished, chest_image_finished_rect)
+        if chest_animation_state == 'finished':
+            if chest_animation == 0:
+                screen.blit(chest_closed_zoom, chest_closed_zoom_rect)
+            if chest_animation < 1:
+                chest_animation += 0.02
+                screen.blit(chest_closed_zoom, chest_closed_zoom_rect)
+            elif chest_animation < 2:
+                chest_animation += 0.02
+                screen.blit(chest_ajar_zoom, chest_ajar_zoom_rect)
+            elif chest_animation < 3:
+                screen.blit(chest_open_zoom, chest_open_zoom_rect)
+                screen.blit(restart_text, restart_text_rect)
+
+    if game_state != 'main_menu':
+        screen.blit(back_button, back_button_rect)
+        screen.blit(close_button, close_button_rect)
 
     # update the game
     pygame.display.update()

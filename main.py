@@ -765,6 +765,8 @@ restart_text = pixel_font_large.render('Push to Restart', False, (255,255,255))
 win_text = pixel_font_large.render('Congratulations! You Found All the Balls!', False, (255,255,255))
 restart_text_rect = restart_text.get_rect(center = (screen.get_width() * 0.50, screen.get_height() * 0.80))
 win_text_rect = win_text.get_rect(center = (screen.get_width() * 0.50, screen.get_height() * 0.20))
+push_text = pixel_font_large.render('Claim Your Reward!', False, (255,255,255))
+push_text_rect = push_text.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.30))
 
 step_text = pixel_font_med.render('Step', True, (117,198,184))
 step_text_rect = step_text.get_rect(center = (screen.get_width() * 0.27, screen.get_height() * 0.13))
@@ -1416,7 +1418,8 @@ while True:
         if chest_animation_state == 'finished':
             if chest_animation == 0:
                 screen.blit(chest_closed_zoom, chest_closed_zoom_rect)
-            if chest_animation < 1:
+                screen.blit(push_text, push_text_rect)
+            elif chest_animation < 1:
                 chest_animation += 0.02
                 screen.blit(chest_closed_zoom, chest_closed_zoom_rect)
             elif chest_animation < 2:

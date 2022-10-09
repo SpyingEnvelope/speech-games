@@ -710,19 +710,19 @@ screen_height = root.winfo_screenheight()
 
 # set display size
 if screen_height == 1440:
-    screen = pygame.display.set_mode((2560, 1440))
+    screen = pygame.display.set_mode((2560, 1440), pygame.FULLSCREEN)
 if screen_height == 2160:
-    screen = pygame.display.set_mode((3840, 2160))
+    screen = pygame.display.set_mode((3840, 2160), pygame.FULLSCREEN)
 if screen_height == 1080:
-    screen = pygame.display.set_mode((1920, 1080))
+    screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
 if screen_height == 720:
-    screen = pygame.display.set_mode((1280, 720))
+    screen = pygame.display.set_mode((1280, 720), pygame.FULLSCREEN)
 if screen_height == 480:
-    screen = pygame.display.set_mode((854, 480))
+    screen = pygame.display.set_mode((854, 480), pygame.FULLSCREEN)
 if screen_height == 360:
-    screen = pygame.display.set_mode((640, 360))
+    screen = pygame.display.set_mode((640, 360), pygame.FULLSCREEN)
 if screen_height == 240:
-    screen = pygame.display.set_mode((426, 240))
+    screen = pygame.display.set_mode((426, 240), pygame.FULLSCREEN)
 # screen = pygame.display.set_mode((screen_width * 0.90, screen_height * 0.90), pygame.RESIZABLE)
 pygame.display.set_caption('Speech Game')
 

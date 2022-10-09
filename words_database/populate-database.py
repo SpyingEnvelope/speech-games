@@ -5,7 +5,7 @@ conn = sqlite3.connect('words-database.db')
 c = conn.cursor()
 
 c.execute("""
-    CREATE TABLE e_initial (
+    CREATE TABLE h_initial (
         word text,
         path text
     )
@@ -16,24 +16,24 @@ print('Table successfully created')
 # conn.commit()
 
 many_words = [
-    ('Eagle', 'words_database/e-initial/eagle.png'),
-    ('Ear', 'words_database/e-initial/ear.png'),
-    ('Earth', 'words_database/e-initial/earth.png'),
-    ('Echidna', 'words_database/e-initial/echidna.png'),
-    ('Echo', 'words_database/e-initial/echo.png'),
-    ('Egg', 'words_database/e-initial/egg.png'),
-    ('Eggplant', 'words_database/e-initial/eggplant.png'),
-    ('Eight', 'words_database/e-initial/eight.png'),
-    ('Elephant', 'words_database/e-initial/elephant.png'),
-    ('Elevator', 'words_database/e-initial/elevator.png'),
-    ('Eleven', 'words_database/e-initial/eleven.png'),
-    ('Elk', 'words_database/e-initial/elk.png'),
-    ('End', 'words_database/e-initial/end.png'),
-    ('Eraser', 'words_database/e-initial/eraser.png'),
-    ('Exit', 'words_database/e-initial/exit.png')
+    ('Hand', 'words_database/h-initial/hand.png'),
+    ('Hat', 'words_database/h-initial/hat.png'),
+    ('Heart', 'words_database/h-initial/heart.png'),
+    ('Hen', 'words_database/h-initial/hen.png'),
+    ('Her', 'words_database/h-initial/her.png'),
+    ('Hide', 'words_database/h-initial/hide.png'),
+    ('Hill', 'words_database/h-initial/hill.png'),
+    ('Him', 'words_database/h-initial/him.png'),
+    ('Hockey', 'words_database/h-initial/hockey.png'),
+    ('Hole', 'words_database/h-initial/hole.png'),
+    ('Horse', 'words_database/h-initial/horse.png'),
+    ('Hot', 'words_database/h-initial/hot.png'),
+    ('House', 'words_database/h-initial/house.png'),
+    ('Hug', 'words_database/h-initial/hug.png'),
+    ('Hurt', 'words_database/h-initial/hurt.png')
 ]
 
-c.executemany("INSERT INTO e_initial VALUES (?,?)", many_words)
+c.executemany("INSERT INTO h_initial VALUES (?,?)", many_words)
 print('words and paths successfully added to database')
 
 conn.commit()

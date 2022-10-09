@@ -600,11 +600,29 @@ def move_found_balls(name, pos):
         print('all balls found')
 
 # connect to database
-conn = sqlite3.connect('words_database/words-database.db')
-c = conn.cursor()
-c.execute('SELECT * FROM e_initial')
-words_and_paths = c.fetchall()
-conn.close()
+# conn = sqlite3.connect('words_database/words-database.db')
+# c = conn.cursor()
+# c.execute('SELECT * FROM h_initial')
+# words_and_paths = c.fetchall()
+# conn.close()
+
+def words_selector(table):
+    global words_and_paths
+
+    conn = sqlite3.connect('words_database/words-database.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM ' + table)
+    words_and_paths = c.fetchall()
+    conn.close()
+
+def initialize_cariboo():
+    flash_cards_init()
+    images_and_rect_trans()
+    chest_update()
+    ball_update()
+    set_flash_state()
+    set_flash_animation_state()
+    ball_animation_init()
 
 # init the game
 pygame.init()
@@ -616,8 +634,8 @@ screen_height = root.winfo_screenheight()
 
 
 # set display size
-# screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
-screen = pygame.display.set_mode((screen_width * 0.90, screen_height * 0.90), pygame.RESIZABLE)
+screen = pygame.display.set_mode((1920, 1080))
+# screen = pygame.display.set_mode((screen_width * 0.90, screen_height * 0.90), pygame.RESIZABLE)
 pygame.display.set_caption('Speech Game')
 
 # start clock
@@ -635,9 +653,9 @@ blue_ball_area = pygame.Rect((screen.get_width() * 0.80, screen.get_height() * 0
 
 # import circles and transform
 circle_1_image = pygame.image.load('graphics/ui/circle3.png').convert_alpha()
-circle_1_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.08))
-circle_2_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.08))
-circle_3_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.08))
+circle_1_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.07))
+circle_2_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.07))
+circle_3_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.07))
 
 # rects for circles
 circle_1_rect = circle_1_image_transform.get_rect(center = (screen.get_width() * 0.15, screen.get_height() * 0.12))
@@ -646,45 +664,67 @@ circle_3_rect = circle_3_image_transform.get_rect(center = (screen.get_width() *
 
 # import font
 # cariboo_font = pygame.font.Font('fonts/cariboo/LuckiestGuy-Regular.ttf', int(screen.get_width() * 0.03))
-cariboo_font = pygame.font.Font('fonts/pixel/Pixeltype.ttf', int(screen.get_width() * 0.03))
-game_title = cariboo_font.render('Cariboo', True, (233,169,21))
+pixel_font_med = pygame.font.Font('fonts/pixel/Pixeltype.ttf', int(screen.get_width() * 0.03))
+game_title = pixel_font_med.render('Cariboo', True, (233,169,21))
 game_title_rect = game_title.get_rect(center = (screen.get_width() * 0.57, screen.get_height() * 0.13))
-up_text = cariboo_font.render('Up', True, (185,136,235))
+up_text = pixel_font_med.render('Up', True, (185,136,235))
 up_text_rect = up_text.get_rect(center = (screen.get_width() * 0.32, screen.get_height() * 0.13))
 
-pixel_font = pygame.font.Font('fonts/pixel/Pixeltype.ttf', int(screen.get_width() * 0.05))
-restart_text = pixel_font.render('Restart', False, (255,255,255))
-game_text = pixel_font.render('Game', False, (255,255,255))
+pixel_font_large = pygame.font.Font('fonts/pixel/Pixeltype.ttf', int(screen.get_width() * 0.05))
+restart_text = pixel_font_large.render('Restart', False, (255,255,255))
+game_text = pixel_font_large.render('Game', False, (255,255,255))
 restart_text_rect = restart_text.get_rect(center = (screen.get_width() * 0.50, screen.get_height() * 0.47))
 game_text_rect = game_text.get_rect(center = (screen.get_width() * 0.50, screen.get_height() * 0.54))
 
-step_text = cariboo_font.render('Step', True, (117,198,184))
+step_text = pixel_font_med.render('Step', True, (117,198,184))
 step_text_rect = step_text.get_rect(center = (screen.get_width() * 0.27, screen.get_height() * 0.13))
 
 # import card images for cariboo
-one_1_image = pygame.image.load(words_and_paths[0][1]).convert_alpha()
-one_2_image = pygame.image.load(words_and_paths[1][1]).convert_alpha()
-one_3_image = pygame.image.load(words_and_paths[2][1]).convert_alpha()
-one_4_image = pygame.image.load(words_and_paths[3][1]).convert_alpha()
-one_5_image = pygame.image.load(words_and_paths[4][1]).convert_alpha()
-two_1_image = pygame.image.load(words_and_paths[5][1]).convert_alpha()
-two_2_image = pygame.image.load(words_and_paths[6][1]).convert_alpha()
-two_3_image = pygame.image.load(words_and_paths[7][1]).convert_alpha()
-two_4_image = pygame.image.load(words_and_paths[8][1]).convert_alpha()
-two_5_image = pygame.image.load(words_and_paths[9][1]).convert_alpha()
-three_1_image = pygame.image.load(words_and_paths[10][1]).convert_alpha()
-three_2_image = pygame.image.load(words_and_paths[11][1]).convert_alpha()
-three_3_image = pygame.image.load(words_and_paths[12][1]).convert_alpha()
-three_4_image = pygame.image.load(words_and_paths[13][1]).convert_alpha()
-three_5_image = pygame.image.load(words_and_paths[14][1]).convert_alpha()
+def flash_cards_init():
+    global one_1_image
+    global one_2_image
+    global one_3_image
+    global one_4_image
+    global one_5_image
+    global two_1_image
+    global two_2_image
+    global two_3_image
+    global two_4_image
+    global two_5_image
+    global three_1_image
+    global three_2_image
+    global three_3_image
+    global three_4_image
+    global three_5_image
 
-# background image for cariboo
-cariboo_background_1 = pygame.image.load('graphics/backgrounds/platformer_background_4/background_cariboo.png').convert()
-cariboo_background_2 = pygame.image.load('graphics/backgrounds/platformer_background_4/background_cariboo_2.png').convert()
-cariboo_background_3 = pygame.image.load('graphics/backgrounds/platformer_background_4/background_cariboo_3.png').convert()
-cariboo_background_1 = pygame.transform.scale(cariboo_background_1, (screen.get_width(), screen.get_height()))
-cariboo_background_2 = pygame.transform.scale(cariboo_background_2, (screen.get_width(), screen.get_height()))
-cariboo_background_3 = pygame.transform.scale(cariboo_background_3, (screen.get_width(), screen.get_height()))
+    global cariboo_background_1
+    global cariboo_background_2
+    global cariboo_background_3
+
+
+    one_1_image = pygame.image.load(words_and_paths[0][1]).convert_alpha()
+    one_2_image = pygame.image.load(words_and_paths[1][1]).convert_alpha()
+    one_3_image = pygame.image.load(words_and_paths[2][1]).convert_alpha()
+    one_4_image = pygame.image.load(words_and_paths[3][1]).convert_alpha()
+    one_5_image = pygame.image.load(words_and_paths[4][1]).convert_alpha()
+    two_1_image = pygame.image.load(words_and_paths[5][1]).convert_alpha()
+    two_2_image = pygame.image.load(words_and_paths[6][1]).convert_alpha()
+    two_3_image = pygame.image.load(words_and_paths[7][1]).convert_alpha()
+    two_4_image = pygame.image.load(words_and_paths[8][1]).convert_alpha()
+    two_5_image = pygame.image.load(words_and_paths[9][1]).convert_alpha()
+    three_1_image = pygame.image.load(words_and_paths[10][1]).convert_alpha()
+    three_2_image = pygame.image.load(words_and_paths[11][1]).convert_alpha()
+    three_3_image = pygame.image.load(words_and_paths[12][1]).convert_alpha()
+    three_4_image = pygame.image.load(words_and_paths[13][1]).convert_alpha()
+    three_5_image = pygame.image.load(words_and_paths[14][1]).convert_alpha()
+
+    # background image for cariboo
+    cariboo_background_1 = pygame.image.load('graphics/backgrounds/platformer_background_4/background_cariboo.png').convert()
+    cariboo_background_2 = pygame.image.load('graphics/backgrounds/platformer_background_4/background_cariboo_2.png').convert()
+    cariboo_background_3 = pygame.image.load('graphics/backgrounds/platformer_background_4/background_cariboo_3.png').convert()
+    cariboo_background_1 = pygame.transform.scale(cariboo_background_1, (screen.get_width(), screen.get_height()))
+    cariboo_background_2 = pygame.transform.scale(cariboo_background_2, (screen.get_width(), screen.get_height()))
+    cariboo_background_3 = pygame.transform.scale(cariboo_background_3, (screen.get_width(), screen.get_height()))
 
 # transforms for all card images
 def images_and_rect_trans():
@@ -708,22 +748,26 @@ def images_and_rect_trans():
     global restart_button_image
     global restart_button_rect
 
+    second_size = 0.10
+    third_size = 0.07
+    fourth_size = 0.03
+
     # rectangles measurements for the first is screen.get_width() * 0.07, screen.get_height() * 0.21
-    one_1_image_trans = [pygame.transform.scale(one_1_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(one_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(one_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(one_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(one_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    one_2_image_trans = [pygame.transform.scale(one_2_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(one_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(one_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(one_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(one_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    one_3_image_trans = [pygame.transform.scale(one_3_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(one_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(one_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(one_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(one_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    one_4_image_trans = [pygame.transform.scale(one_4_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(one_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(one_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(one_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(one_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    one_5_image_trans = [pygame.transform.scale(one_5_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(one_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(one_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(one_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(one_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    two_1_image_trans = [pygame.transform.scale(two_1_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(two_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(two_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(two_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(two_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    two_2_image_trans = [pygame.transform.scale(two_2_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(two_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(two_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(two_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(two_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    two_3_image_trans = [pygame.transform.scale(two_3_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(two_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(two_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(two_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(two_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    two_4_image_trans = [pygame.transform.scale(two_4_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(two_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(two_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(two_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(two_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    two_5_image_trans = [pygame.transform.scale(two_5_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(two_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(two_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(two_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(two_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    three_1_image_trans = [pygame.transform.scale(three_1_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(three_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(three_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(three_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(three_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    three_2_image_trans = [pygame.transform.scale(three_2_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(three_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(three_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(three_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(three_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    three_3_image_trans = [pygame.transform.scale(three_3_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(three_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(three_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(three_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(three_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    three_4_image_trans = [pygame.transform.scale(three_4_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(three_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(three_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(three_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(three_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
-    three_5_image_trans = [pygame.transform.scale(three_5_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(three_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.14)), pygame.transform.scale(three_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.07)), pygame.transform.scale(three_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.03)), pygame.transform.scale(three_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    one_1_image_trans = [pygame.transform.scale(one_1_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(one_1_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(one_1_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(one_1_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(one_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    one_2_image_trans = [pygame.transform.scale(one_2_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(one_2_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(one_2_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(one_2_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(one_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    one_3_image_trans = [pygame.transform.scale(one_3_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(one_3_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(one_3_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(one_3_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(one_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    one_4_image_trans = [pygame.transform.scale(one_4_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(one_4_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(one_4_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(one_4_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(one_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    one_5_image_trans = [pygame.transform.scale(one_5_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(one_5_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(one_5_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(one_5_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(one_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    two_1_image_trans = [pygame.transform.scale(two_1_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(two_1_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(two_1_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(two_1_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(two_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    two_2_image_trans = [pygame.transform.scale(two_2_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(two_2_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(two_2_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(two_2_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(two_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    two_3_image_trans = [pygame.transform.scale(two_3_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(two_3_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(two_3_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(two_3_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(two_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    two_4_image_trans = [pygame.transform.scale(two_4_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(two_4_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(two_4_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(two_4_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(two_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    two_5_image_trans = [pygame.transform.scale(two_5_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(two_5_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(two_5_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(two_5_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(two_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    three_1_image_trans = [pygame.transform.scale(three_1_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(three_1_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(three_1_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(three_1_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(three_1_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    three_2_image_trans = [pygame.transform.scale(three_2_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(three_2_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(three_2_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(three_2_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(three_2_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    three_3_image_trans = [pygame.transform.scale(three_3_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(three_3_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(three_3_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(three_3_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(three_3_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    three_4_image_trans = [pygame.transform.scale(three_4_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(three_4_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(three_4_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(three_4_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(three_4_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
+    three_5_image_trans = [pygame.transform.scale(three_5_image, (screen.get_width() * 0.07, screen.get_width() * 0.07)), pygame.transform.scale(three_5_image, (screen.get_width() * 0.07, screen.get_height() * second_size)), pygame.transform.scale(three_5_image, (screen.get_width() * 0.07, screen.get_height() * third_size)), pygame.transform.scale(three_5_image, (screen.get_width() * 0.07, screen.get_height() * fourth_size)), pygame.transform.scale(three_5_image, (screen.get_width() * 0.07, screen.get_height() * 0.002))]
 
     global one_1_rect
     global one_2_rect
@@ -810,17 +854,18 @@ def ball_update():
     ball_3_image = pygame.image.load('graphics/neutral/bubble_3.png').convert_alpha()
     ball_4_image = pygame.image.load('graphics/neutral/bubble_4.png').convert_alpha()
 
-    ball_1_list = [pygame.transform.scale(ball_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.08)), pygame.transform.scale(ball_1_image, (screen.get_width() * 0.03, screen.get_height() * 0.06)), pygame.transform.scale(ball_1_image, (screen.get_width() * 0.015, screen.get_height() * 0.03))]
-    ball_2_list = [pygame.transform.scale(ball_2_image, (screen.get_width() * 0.04, screen.get_height() * 0.08)), pygame.transform.scale(ball_2_image, (screen.get_width() * 0.03, screen.get_height() * 0.06)), pygame.transform.scale(ball_2_image, (screen.get_width() * 0.015, screen.get_height() * 0.03))]
-    ball_3_list = [pygame.transform.scale(ball_3_image, (screen.get_width() * 0.04, screen.get_height() * 0.08)), pygame.transform.scale(ball_3_image, (screen.get_width() * 0.03, screen.get_height() * 0.06)), pygame.transform.scale(ball_3_image, (screen.get_width() * 0.015, screen.get_height() * 0.03))]
-    ball_4_list = [pygame.transform.scale(ball_4_image, (screen.get_width() * 0.04, screen.get_height() * 0.08)), pygame.transform.scale(ball_4_image, (screen.get_width() * 0.03, screen.get_height() * 0.06)), pygame.transform.scale(ball_4_image, (screen.get_width() * 0.015, screen.get_height() * 0.03))]
+    ball_1_list = [pygame.transform.scale(ball_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.07)), pygame.transform.scale(ball_1_image, (screen.get_width() * 0.03, screen.get_height() * 0.06)), pygame.transform.scale(ball_1_image, (screen.get_width() * 0.015, screen.get_height() * 0.03))]
+    ball_2_list = [pygame.transform.scale(ball_2_image, (screen.get_width() * 0.04, screen.get_height() * 0.07)), pygame.transform.scale(ball_2_image, (screen.get_width() * 0.03, screen.get_height() * 0.06)), pygame.transform.scale(ball_2_image, (screen.get_width() * 0.015, screen.get_height() * 0.03))]
+    ball_3_list = [pygame.transform.scale(ball_3_image, (screen.get_width() * 0.04, screen.get_height() * 0.07)), pygame.transform.scale(ball_3_image, (screen.get_width() * 0.03, screen.get_height() * 0.06)), pygame.transform.scale(ball_3_image, (screen.get_width() * 0.015, screen.get_height() * 0.03))]
+    ball_4_list = [pygame.transform.scale(ball_4_image, (screen.get_width() * 0.04, screen.get_height() * 0.07)), pygame.transform.scale(ball_4_image, (screen.get_width() * 0.03, screen.get_height() * 0.06)), pygame.transform.scale(ball_4_image, (screen.get_width() * 0.015, screen.get_height() * 0.03))]
 
-    ball_1_trans = pygame.transform.scale(ball_1_image, (screen.get_width() * 0.05, screen.get_height() * 0.08))
-    ball_2_trans = pygame.transform.scale(ball_2_image, (screen.get_width() * 0.05, screen.get_height() * 0.08))
-    ball_3_trans = pygame.transform.scale(ball_3_image, (screen.get_width() * 0.05, screen.get_height() * 0.08))
-    ball_4_trans = pygame.transform.scale(ball_4_image, (screen.get_width() * 0.05, screen.get_height() * 0.08))
+    ball_1_trans = pygame.transform.scale(ball_1_image, (screen.get_width() * 0.05, screen.get_height() * 0.07))
+    ball_2_trans = pygame.transform.scale(ball_2_image, (screen.get_width() * 0.05, screen.get_height() * 0.07))
+    ball_3_trans = pygame.transform.scale(ball_3_image, (screen.get_width() * 0.05, screen.get_height() * 0.07))
+    ball_4_trans = pygame.transform.scale(ball_4_image, (screen.get_width() * 0.05, screen.get_height() * 0.07))
 
 def ball_animation_init():
+
     global ball_1_animation
     global ball_2_animation
     global ball_3_animation
@@ -835,13 +880,55 @@ def ball_animation_init():
     chest_animation = 0
     background_animation = 0
 
+def button_images():
+    global blue_button
+    global a_button_rect
+    global b_button_rect
+    global c_button_rect
+    global d_button_rect
+    global e_button_rect
+    global f_button_rect
+    global g_button_rect
+    global h_button_rect
+
+    global letter_selection
+    global letter_selection_rect
+
+    global a_letter
+    global b_letter
+    global c_letter
+    global d_letter
+    global e_letter
+    global f_letter
+    global g_letter
+    global h_letter
+
+    blue_button = pygame.image.load('graphics/buttons/blue_button.png').convert_alpha()
+    blue_button = pygame.transform.scale(blue_button, (screen.get_width() * 0.10, screen.get_height() * 0.10))
+
+    a_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.07, screen.get_height() * 0.10))
+    b_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.21, screen.get_height() * 0.10))
+    c_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.35, screen.get_height() * 0.10))
+    d_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.49, screen.get_height() * 0.10))
+    e_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.63, screen.get_height() * 0.10))
+    f_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.77, screen.get_height() * 0.10))
+    g_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.91, screen.get_height() * 0.10))
+    h_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.07, screen.get_height() * 0.25))
+
+    letter_selection = pixel_font_large.render('SELECT A LETTER', False, 'White')
+    letter_selection_rect = letter_selection.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.04))
+    a_letter = pixel_font_large.render('A', False, 'White')
+    b_letter = pixel_font_large.render('B', False, 'White')
+    c_letter = pixel_font_large.render('C', False, 'White')
+    d_letter = pixel_font_large.render('D', False, 'White')
+    e_letter = pixel_font_large.render('E', False, 'White')
+    f_letter = pixel_font_large.render('F', False, 'White')
+    g_letter = pixel_font_large.render('G', False, 'White')
+    h_letter = pixel_font_large.render('H', False, 'White')
+
 # rects for card images
-images_and_rect_trans()
-chest_update()
-ball_update()
-set_flash_state()
-set_flash_animation_state()
-ball_animation_init()
+
+button_images()
 
 while True:
 
@@ -882,75 +969,135 @@ while True:
         
         if event.type == pygame.MOUSEBUTTONDOWN:
             # Collider for inserting balls to the top circles
-            if circle_1_rect.collidepoint(event.pos) :
-                position_ball(circle_1_rect.left, circle_1_rect.top)
-            elif circle_2_rect.collidepoint(event.pos):
-                position_ball(circle_2_rect.left, circle_2_rect.top)
-            elif circle_3_rect.collidepoint(event.pos):
-                position_ball(circle_3_rect.left, circle_3_rect.top)
+            if game_state == 'cariboo':
+                if circle_1_rect.collidepoint(event.pos) :
+                    position_ball(circle_1_rect.left, circle_1_rect.top)
+                elif circle_2_rect.collidepoint(event.pos):
+                    position_ball(circle_2_rect.left, circle_2_rect.top)
+                elif circle_3_rect.collidepoint(event.pos):
+                    position_ball(circle_3_rect.left, circle_3_rect.top)
 
-            # Colliders for flash cards/main rectangles
-            if len(ball_list) == 4:
-                # first row of flash cards/rectangles
-                if one_1_rect.collidepoint(event.pos):
-                    rect_1_1_state = True
-                if one_2_rect.collidepoint(event.pos):
-                    rect_1_2_state = True
-                if one_3_rect.collidepoint(event.pos):
-                    rect_1_3_state = True
-                if one_4_rect.collidepoint(event.pos):
-                    rect_1_4_state = True
-                if one_5_rect.collidepoint(event.pos):
-                    rect_1_5_state = True
+                # Colliders for flash cards/main rectangles
+                if len(ball_list) == 4:
+                    # first row of flash cards/rectangles
+                    if one_1_rect.collidepoint(event.pos):
+                        rect_1_1_state = True
+                    if one_2_rect.collidepoint(event.pos):
+                        rect_1_2_state = True
+                    if one_3_rect.collidepoint(event.pos):
+                        rect_1_3_state = True
+                    if one_4_rect.collidepoint(event.pos):
+                        rect_1_4_state = True
+                    if one_5_rect.collidepoint(event.pos):
+                        rect_1_5_state = True
 
-                ## second row of flash cards/rectangles
-                if two_1_rect.collidepoint(event.pos):
-                    rect_2_1_state = True
-                if two_2_rect.collidepoint(event.pos):
-                    rect_2_2_state = True
-                if two_3_rect.collidepoint(event.pos):
-                    rect_2_3_state = True
-                if two_4_rect.collidepoint(event.pos):
-                    rect_2_4_state = True
-                if two_5_rect.collidepoint(event.pos):
-                    rect_2_5_state = True
-                
-                ### third row of flash cards/rectangles
-                if three_1_rect.collidepoint(event.pos):
-                    rect_3_1_state = True
-                if three_2_rect.collidepoint(event.pos):
-                    rect_3_2_state = True
-                if three_3_rect.collidepoint(event.pos):
-                    rect_3_3_state = True
-                if three_4_rect.collidepoint(event.pos):
-                    rect_3_4_state = True
-                if three_5_rect.collidepoint(event.pos):
-                    rect_3_5_state = True
-                
-                ### Colliders for balls in order to move them
-                if ball_list[0][2].collidepoint(event.pos):
-                    print('collided with ball 1')
-                    move_found_balls('ball_1', event.pos)
+                    ## second row of flash cards/rectangles
+                    if two_1_rect.collidepoint(event.pos):
+                        rect_2_1_state = True
+                    if two_2_rect.collidepoint(event.pos):
+                        rect_2_2_state = True
+                    if two_3_rect.collidepoint(event.pos):
+                        rect_2_3_state = True
+                    if two_4_rect.collidepoint(event.pos):
+                        rect_2_4_state = True
+                    if two_5_rect.collidepoint(event.pos):
+                        rect_2_5_state = True
+                    
+                    ### third row of flash cards/rectangles
+                    if three_1_rect.collidepoint(event.pos):
+                        rect_3_1_state = True
+                    if three_2_rect.collidepoint(event.pos):
+                        rect_3_2_state = True
+                    if three_3_rect.collidepoint(event.pos):
+                        rect_3_3_state = True
+                    if three_4_rect.collidepoint(event.pos):
+                        rect_3_4_state = True
+                    if three_5_rect.collidepoint(event.pos):
+                        rect_3_5_state = True
+                    
+                    ### Colliders for balls in order to move them
+                    if ball_list[0][2].collidepoint(event.pos):
+                        print('collided with ball 1')
+                        move_found_balls('ball_1', event.pos)
 
-                if ball_list[1][2].collidepoint(event.pos):
-                    print('collided with ball 2')
-                    move_found_balls('ball_2', event.pos)
+                    if ball_list[1][2].collidepoint(event.pos):
+                        print('collided with ball 2')
+                        move_found_balls('ball_2', event.pos)
 
-                if ball_list[2][2].collidepoint(event.pos):
-                    print('collided with ball 3')
-                    move_found_balls('ball_3', event.pos)
-                
-                if ball_list[3][2].collidepoint(event.pos):
-                    print('collided with ball_4')
-                    move_found_balls('ball_4', event.pos)
+                    if ball_list[2][2].collidepoint(event.pos):
+                        print('collided with ball 3')
+                        move_found_balls('ball_3', event.pos)
+                    
+                    if ball_list[3][2].collidepoint(event.pos):
+                        print('collided with ball_4')
+                        move_found_balls('ball_4', event.pos)
                 
                 # collider to restart game
-            if restart_button_rect.collidepoint(event.pos) and game_state == 'cariboo_finished':
-                print('game restarting')
-                restart_cariboo()
+            if game_state == 'cariboo_finished':
+                if restart_button_rect.collidepoint(event.pos):
+                    print('game restarting')
+                    restart_cariboo()
+
+            if game_state == 'cariboo_init':
+                if a_button_rect.collidepoint(event.pos):
+                    words_selector('a_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo'
+
+                if b_button_rect.collidepoint(event.pos):
+                    words_selector('b_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo'
+
+                if c_button_rect.collidepoint(event.pos):
+                    words_selector('c_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo'
+
+                if d_button_rect.collidepoint(event.pos):
+                    words_selector('d_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo'
+
+                if e_button_rect.collidepoint(event.pos):
+                    words_selector('e_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo'
+
+                if f_button_rect.collidepoint(event.pos):
+                    words_selector('f_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo'
+
+                if g_button_rect.collidepoint(event.pos):
+                    words_selector('g_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo'
+
+                if h_button_rect.collidepoint(event.pos):
+                    words_selector('h_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo'
 
     if game_state == 'cariboo_init':
-        game_state = 'cariboo'
+        screen.fill((94,129,162))
+        screen.blit(letter_selection, letter_selection_rect)
+        screen.blit(blue_button, a_button_rect)
+        screen.blit(a_letter, (screen.get_width() * 0.06, screen.get_height() * 0.075))
+        screen.blit(blue_button, b_button_rect)
+        screen.blit(b_letter, (screen.get_width() * 0.20, screen.get_height() * 0.075))
+        screen.blit(blue_button, c_button_rect)
+        screen.blit(c_letter, (screen.get_width() * 0.34, screen.get_height() * 0.075))
+        screen.blit(blue_button, d_button_rect)
+        screen.blit(d_letter, (screen.get_width() * 0.48, screen.get_height() * 0.075))
+        screen.blit(blue_button, e_button_rect)
+        screen.blit(e_letter, (screen.get_width() * 0.62, screen.get_height() * 0.075))
+        screen.blit(blue_button, f_button_rect)
+        screen.blit(f_letter, (screen.get_width() * 0.76, screen.get_height() * 0.075))
+        screen.blit(blue_button, g_button_rect)
+        screen.blit(g_letter, (screen.get_width() * 0.90, screen.get_height() * 0.075))
+        screen.blit(blue_button, h_button_rect)
+        screen.blit(h_letter, (screen.get_width() * 0.06, screen.get_height() * 0.225))
 
 
     if game_state == 'cariboo':

@@ -1,4 +1,5 @@
 from fileinput import close
+from turtle import circle
 import pygame
 from pygame import gfxdraw
 from sys import exit
@@ -9,12 +10,12 @@ import math
 
 # functions/methods
 
-def restart_cariboo():
+def restart_cariboo(restart = False):
     global ball_list
     global balls_found_list
-    global game_state
     global chest_animation_state
     global fade_in_animation
+    global reward_animation
 
     global ball_1_rect_list
     global ball_2_rect_list
@@ -33,7 +34,10 @@ def restart_cariboo():
     ball_animation_init()
     chest_animation_state = 'not_finished'
     fade_in_animation = 'not_finished'
-    game_state = 'cariboo'
+    reward_animation = 'not_finished'
+    if restart:
+        global game_state
+        game_state = 'cariboo'
     print(ball_list)
 
 
@@ -636,7 +640,7 @@ def image_zoom(img, rect):
     for each in range(300):
         chest_closed_zoom = pygame.transform.scale(img, (screen.get_width() * (each / 500), screen.get_height() * (each / 500)))
         chest_closed_zoom_rect = chest_closed_zoom.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.5))
-
+        
         screen.blit(chest_closed_zoom, chest_closed_zoom_rect)
         pygame.display.update()
         pygame.time.delay(1)
@@ -673,6 +677,25 @@ def fade_in():
     
     fade_in_animation = 'finished'
 
+def reward_jump(reward):
+    global reward_img_rect
+    global reward_animation
+    reward_img_rect = 0
+
+    for each in range(60, 0, -1):
+        if each > 30:
+            reward_img_rect = reward.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * (each / 120)))
+
+            screen.fill((94,129,162))
+            screen.blit(chest_open_zoom, chest_open_zoom_rect)
+            screen.blit(reward, reward_img_rect)
+            pygame.display.update()
+            pygame.time.delay(30)
+        if each < 30:
+            pass
+    
+    reward_animation = 'finished'
+
 # connect to database
 # conn = sqlite3.connect('words_database/words-database.db')
 # c = conn.cursor()
@@ -698,6 +721,8 @@ def initialize_cariboo():
     set_flash_animation_state()
     ball_animation_init()
     restart_cariboo()
+    initiate_cariboo_state()
+    initiate_cariboo_circles_text_board()
 
 # init the game
 pygame.init()
@@ -730,46 +755,82 @@ pygame.display.set_caption('Speech Game')
 clock = pygame.time.Clock()
 
 # set the game_state to decide a game
-game_state = 'cariboo_init'
-game_phase = 'ball'
-ball_list = []
-balls_found_list = []
-chest_animation_state = 'not_finished'
-fade_in_animation = 'not_finished'
+def initiate_cariboo_state():
+    global game_phase
+    global game_state
+    global ball_list
+    global balls_found_list
+    global chest_animation_state
+    global fade_in_animation
+
+
+    game_state = 'cariboo_init'
+    game_phase = 'ball'
+    ball_list = []
+    balls_found_list = []
+    chest_animation_state = 'not_finished'
+    fade_in_animation = 'not_finished'
 
 # main board rect
-main_board = pygame.Rect((screen.get_width() * 0.05, screen.get_height() * 0.05), (screen.get_width() * 0.78, screen.get_height() * 0.90))
-blue_ball_area = pygame.Rect((screen.get_width() * 0.80, screen.get_height() * 0.05), (screen.get_width() * 0.15, screen.get_height() * 0.90))
+def initiate_cariboo_circles_text_board():
+    global main_board
+    global blue_ball_area
+    global circle_1_image
+    global circle_1_image_transform
+    global circle_2_image_transform
+    global circle_3_image_transform
+    global circle_1_rect
+    global circle_2_rect
+    global circle_3_rect
 
-# import circles and transform
-circle_1_image = pygame.image.load('graphics/ui/circle3.png').convert_alpha()
-circle_1_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.07))
-circle_2_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.07))
-circle_3_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.07))
+    global pixel_font_med
+    global pixel_font_large
 
-# rects for circles
-circle_1_rect = circle_1_image_transform.get_rect(center = (screen.get_width() * 0.15, screen.get_height() * 0.12))
-circle_2_rect = circle_2_image_transform.get_rect(center = (screen.get_width() * 0.43, screen.get_height() * 0.12))
-circle_3_rect = circle_3_image_transform.get_rect(center = (screen.get_width() * 0.71, screen.get_height() * 0.12))
+    global game_title
+    global game_title_rect
+    global up_text
+    global up_text_rect
+    global restart_text
+    global win_text
+    global restart_text_rect
+    global win_text_rect
+    global push_text
+    global push_text_rect
+    global step_text
+    global step_text_rect
 
-# import font
-# cariboo_font = pygame.font.Font('fonts/cariboo/LuckiestGuy-Regular.ttf', int(screen.get_width() * 0.03))
-pixel_font_med = pygame.font.Font('fonts/pixel/Pixeltype.ttf', int(screen.get_width() * 0.03))
-game_title = pixel_font_med.render('Cariboo', True, (233,169,21))
-game_title_rect = game_title.get_rect(center = (screen.get_width() * 0.57, screen.get_height() * 0.13))
-up_text = pixel_font_med.render('Up', True, (185,136,235))
-up_text_rect = up_text.get_rect(center = (screen.get_width() * 0.32, screen.get_height() * 0.13))
+    main_board = pygame.Rect((screen.get_width() * 0.05, screen.get_height() * 0.05), (screen.get_width() * 0.78, screen.get_height() * 0.90))
+    blue_ball_area = pygame.Rect((screen.get_width() * 0.80, screen.get_height() * 0.05), (screen.get_width() * 0.15, screen.get_height() * 0.90))
 
-pixel_font_large = pygame.font.Font('fonts/pixel/Pixeltype.ttf', int(screen.get_width() * 0.05))
-restart_text = pixel_font_large.render('Push to Restart', False, (255,255,255))
-win_text = pixel_font_large.render('Congratulations! You Found All the Balls!', False, (255,255,255))
-restart_text_rect = restart_text.get_rect(center = (screen.get_width() * 0.50, screen.get_height() * 0.80))
-win_text_rect = win_text.get_rect(center = (screen.get_width() * 0.50, screen.get_height() * 0.20))
-push_text = pixel_font_large.render('Claim Your Reward!', False, (255,255,255))
-push_text_rect = push_text.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.30))
+    # import circles and transform
+    circle_1_image = pygame.image.load('graphics/ui/circle3.png').convert_alpha()
+    circle_1_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.07))
+    circle_2_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.07))
+    circle_3_image_transform = pygame.transform.scale(circle_1_image, (screen.get_width() * 0.04, screen.get_height() * 0.07))
 
-step_text = pixel_font_med.render('Step', True, (117,198,184))
-step_text_rect = step_text.get_rect(center = (screen.get_width() * 0.27, screen.get_height() * 0.13))
+    # rects for circles
+    circle_1_rect = circle_1_image_transform.get_rect(center = (screen.get_width() * 0.15, screen.get_height() * 0.12))
+    circle_2_rect = circle_2_image_transform.get_rect(center = (screen.get_width() * 0.43, screen.get_height() * 0.12))
+    circle_3_rect = circle_3_image_transform.get_rect(center = (screen.get_width() * 0.71, screen.get_height() * 0.12))
+
+    # import font
+    # cariboo_font = pygame.font.Font('fonts/cariboo/LuckiestGuy-Regular.ttf', int(screen.get_width() * 0.03))
+    pixel_font_med = pygame.font.Font('fonts/pixel/Pixeltype.ttf', int(screen.get_width() * 0.03))
+    game_title = pixel_font_med.render('Cariboo', True, (233,169,21))
+    game_title_rect = game_title.get_rect(center = (screen.get_width() * 0.57, screen.get_height() * 0.13))
+    up_text = pixel_font_med.render('Up', True, (185,136,235))
+    up_text_rect = up_text.get_rect(center = (screen.get_width() * 0.32, screen.get_height() * 0.13))
+
+    pixel_font_large = pygame.font.Font('fonts/pixel/Pixeltype.ttf', int(screen.get_width() * 0.05))
+    restart_text = pixel_font_large.render('Push to Restart', False, (255,255,255))
+    win_text = pixel_font_large.render('Congratulations! You Found All the Balls!', False, (255,255,255))
+    restart_text_rect = restart_text.get_rect(center = (screen.get_width() * 0.50, screen.get_height() * 0.80))
+    win_text_rect = win_text.get_rect(center = (screen.get_width() * 0.50, screen.get_height() * 0.20))
+    push_text = pixel_font_large.render('Claim Your Reward!', False, (255,255,255))
+    push_text_rect = push_text.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.30))
+
+    step_text = pixel_font_med.render('Step', True, (117,198,184))
+    step_text_rect = step_text.get_rect(center = (screen.get_width() * 0.27, screen.get_height() * 0.13))
 
 # import card images for cariboo
 def flash_cards_init():
@@ -1003,9 +1064,21 @@ def button_images():
     global g_letter
     global h_letter
 
+    global reward_selection
+    global reward_selection_rect
+    global blue_button_rewards
+    global trophy_button_rect
+    global coin_button_rect
+    global candy_button_rect
+    global trophy_text
+    global coin_text
+    global candy_text
+
     blue_button = pygame.image.load('graphics/buttons/blue_button.png').convert_alpha()
     blue_button = pygame.transform.scale(blue_button, (screen.get_width() * 0.10, screen.get_height() * 0.10))
+    blue_button_rewards = pygame.transform.scale(blue_button, (screen.get_width() * 0.20, screen.get_height() * 0.20))
 
+    # this section is for letter selection
     button_height_position = 0.13
 
     a_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.07, screen.get_height() * button_height_position))
@@ -1028,10 +1101,29 @@ def button_images():
     g_letter = pixel_font_large.render('G', False, 'White')
     h_letter = pixel_font_large.render('H', False, 'White')
 
+    ## this section is for reward selection
+    reward_selection = pixel_font_large.render('SELECT A REWARD', False, 'White')
+    reward_selection_rect = reward_selection.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.04))
+
+    trophy_button_rect = blue_button_rewards.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.2))
+    coin_button_rect = blue_button_rewards.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.4))
+    candy_button_rect = blue_button_rewards.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.6))
+
+    trophy_text = pixel_font_large.render('TROPHY', False, 'White')
+    coin_text = pixel_font_large.render('COIN', False, 'White')
+    candy_text = pixel_font_large.render('CANDY', False, 'White')
+
+def reward_image(img):
+    global reward_img
+    reward_img = pygame.image.load(img).convert_alpha()
+    reward_img = pygame.transform.scale(reward_img, (screen.get_width() * 0.20, screen.get_height() * 0.20))
+
 # rects for card images
 
+initiate_cariboo_circles_text_board()
 button_images()
 initiate_menu_buttons()
+initiate_cariboo_state()
 
 while True:
 
@@ -1139,7 +1231,7 @@ while True:
             if game_state == 'cariboo_finished':
                 if restart_button_rect.collidepoint(event.pos) and chest_animation >= 2:
                     print('game restarting')
-                    restart_cariboo()
+                    restart_cariboo(True)
                 if chest_animation_state == 'finished':
                     if chest_closed_zoom_rect.collidepoint(event.pos) and chest_animation == 0:
                         chest_open()
@@ -1148,41 +1240,52 @@ while True:
                 if a_button_rect.collidepoint(event.pos):
                     words_selector('a_initial')
                     initialize_cariboo()
-                    game_state = 'cariboo'
+                    game_state = 'cariboo_reward'
 
                 if b_button_rect.collidepoint(event.pos):
                     words_selector('b_initial')
                     initialize_cariboo()
-                    game_state = 'cariboo'
+                    game_state = 'cariboo_reward'
 
                 if c_button_rect.collidepoint(event.pos):
                     words_selector('c_initial')
                     initialize_cariboo()
-                    game_state = 'cariboo'
+                    game_state = 'cariboo_reward'
 
                 if d_button_rect.collidepoint(event.pos):
                     words_selector('d_initial')
                     initialize_cariboo()
-                    game_state = 'cariboo'
+                    game_state = 'cariboo_reward'
 
                 if e_button_rect.collidepoint(event.pos):
                     words_selector('e_initial')
                     initialize_cariboo()
-                    game_state = 'cariboo'
+                    game_state = 'cariboo_reward'
 
                 if f_button_rect.collidepoint(event.pos):
                     words_selector('f_initial')
                     initialize_cariboo()
-                    game_state = 'cariboo'
+                    game_state = 'cariboo_reward'
 
                 if g_button_rect.collidepoint(event.pos):
                     words_selector('g_initial')
                     initialize_cariboo()
-                    game_state = 'cariboo'
+                    game_state = 'cariboo_reward'
 
                 if h_button_rect.collidepoint(event.pos):
                     words_selector('h_initial')
                     initialize_cariboo()
+                    game_state = 'cariboo_reward'
+            
+            elif game_state == 'cariboo_reward':
+                if trophy_button_rect.collidepoint(event.pos):
+                    reward_image('graphics/rewards/trophy.png')
+                    game_state = 'cariboo'
+                if coin_button_rect.collidepoint(event.pos):
+                    reward_image('graphics/rewards/coin.png')
+                    game_state = 'cariboo'
+                if candy_button_rect.collidepoint(event.pos):
+                    reward_image('graphics/rewards/candy.png')
                     game_state = 'cariboo'
 
             if game_state != 'main_menu':
@@ -1212,6 +1315,16 @@ while True:
         screen.blit(g_letter, (screen.get_width() * 0.90, screen.get_height() * 0.1))
         screen.blit(blue_button, h_button_rect)
         screen.blit(h_letter, (screen.get_width() * 0.06, screen.get_height() * 0.255))
+
+    if game_state == 'cariboo_reward':
+        screen.fill((94,129,162))
+        screen.blit(reward_selection, reward_selection_rect)
+        screen.blit(blue_button_rewards, trophy_button_rect)
+        screen.blit(trophy_text, (screen.get_width() * 0.445, screen.get_height() * 0.17))
+        screen.blit(blue_button_rewards, coin_button_rect)
+        screen.blit(coin_text, (screen.get_width() * 0.465, screen.get_height() * 0.37))
+        screen.blit(blue_button_rewards, candy_button_rect)
+        screen.blit(candy_text, (screen.get_width() * 0.455, screen.get_height() * 0.57))
 
 
     if game_state == 'cariboo':
@@ -1408,16 +1521,21 @@ while True:
         # screen.blit(restart_button_image, restart_button_rect)
         # screen.blit(restart_text, restart_text_rect)
         # screen.blit(game_text, game_text_rect)
+        
+        ## blue screen fade in
         if fade_in_animation != 'finished':
             fade_in()
 
-        screen.blit(win_text, win_text_rect)
+        # screen.blit(win_text, win_text_rect)
+
+        ## do the chest animation
 
         if chest_animation_state != 'finished':
             image_zoom(chest_image_finished, chest_image_finished_rect)
         if chest_animation_state == 'finished':
             if chest_animation == 0:
                 screen.blit(chest_closed_zoom, chest_closed_zoom_rect)
+                screen.blit(win_text, win_text_rect)
                 screen.blit(push_text, push_text_rect)
             elif chest_animation < 1:
                 chest_animation += 0.02
@@ -1427,6 +1545,11 @@ while True:
                 screen.blit(chest_ajar_zoom, chest_ajar_zoom_rect)
             elif chest_animation < 3:
                 screen.blit(chest_open_zoom, chest_open_zoom_rect)
+                if reward_animation == 'not_finished':
+                    reward_jump(reward_img)
+                else:
+                    screen.blit(reward_img, reward_img_rect)
+                # screen.blit(reward_img, (screen.get_width() * 0.4, screen.get_height() * 0.4))
                 screen.blit(restart_text, restart_text_rect)
 
     if game_state != 'main_menu':

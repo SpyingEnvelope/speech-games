@@ -696,13 +696,6 @@ def reward_jump(reward):
     
     reward_animation = 'finished'
 
-# connect to database
-# conn = sqlite3.connect('words_database/words-database.db')
-# c = conn.cursor()
-# c.execute('SELECT * FROM h_initial')
-# words_and_paths = c.fetchall()
-# conn.close()
-
 def words_selector(table):
     global words_and_paths
 
@@ -723,6 +716,12 @@ def initialize_cariboo():
     restart_cariboo()
     initiate_cariboo_state()
     initiate_cariboo_circles_text_board()
+    cariboo_audio_init()
+
+def cariboo_audio_init():
+    global ball_drop_audio
+
+    ball_drop_audio = pygame.mixer.Sound('audio/cariboo/ball_drop.wav')
 
 # init the game
 pygame.init()
@@ -735,7 +734,7 @@ screen_height = root.winfo_screenheight()
 
 # set display size
 if screen_height == 1440:
-    screen = pygame.display.set_mode((2560, 1440), pygame.FULLSCREEN)
+    screen = pygame.display.set_mode((2560, 1440))
 if screen_height == 2160:
     screen = pygame.display.set_mode((3840, 2160), pygame.FULLSCREEN)
 if screen_height == 1080:
@@ -1051,6 +1050,8 @@ def button_images():
     global f_button_rect
     global g_button_rect
     global h_button_rect
+    global i_button_rect
+    global j_button_rect
 
     global letter_selection
     global letter_selection_rect
@@ -1063,6 +1064,8 @@ def button_images():
     global f_letter
     global g_letter
     global h_letter
+    global i_letter
+    global j_letter
 
     global reward_selection
     global reward_selection_rect
@@ -1089,6 +1092,8 @@ def button_images():
     f_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.77, screen.get_height() * button_height_position))
     g_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.91, screen.get_height() * button_height_position))
     h_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.07, screen.get_height() * (button_height_position + 0.15)))
+    i_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.21, screen.get_height() * (button_height_position + 0.15)))
+    j_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.35, screen.get_height() * (button_height_position + 0.15)))
 
     letter_selection = pixel_font_large.render('SELECT A LETTER', False, 'White')
     letter_selection_rect = letter_selection.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.04))
@@ -1100,6 +1105,8 @@ def button_images():
     f_letter = pixel_font_large.render('F', False, 'White')
     g_letter = pixel_font_large.render('G', False, 'White')
     h_letter = pixel_font_large.render('H', False, 'White')
+    i_letter = pixel_font_large.render('I', False, 'White')
+    j_letter = pixel_font_large.render('J', False, 'White')
 
     ## this section is for reward selection
     reward_selection = pixel_font_large.render('SELECT A REWARD', False, 'White')
@@ -1276,6 +1283,15 @@ while True:
                     words_selector('h_initial')
                     initialize_cariboo()
                     game_state = 'cariboo_reward'
+                if i_button_rect.collidepoint(event.pos):
+                    words_selector('i_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+                
+                if j_button_rect.collidepoint(event.pos):
+                    words_selector('j_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
             
             elif game_state == 'cariboo_reward':
                 if trophy_button_rect.collidepoint(event.pos):
@@ -1315,6 +1331,10 @@ while True:
         screen.blit(g_letter, (screen.get_width() * 0.90, screen.get_height() * 0.1))
         screen.blit(blue_button, h_button_rect)
         screen.blit(h_letter, (screen.get_width() * 0.06, screen.get_height() * 0.255))
+        screen.blit(blue_button, i_button_rect)
+        screen.blit(i_letter, (screen.get_width() * 0.205, screen.get_height() * 0.255))
+        screen.blit(blue_button, j_button_rect)
+        screen.blit(j_letter, (screen.get_width() * 0.34, screen.get_height() * 0.255))
 
     if game_state == 'cariboo_reward':
         screen.fill((94,129,162))
@@ -1466,54 +1486,90 @@ while True:
         try:   
             if ball_1_animation < 1:
                 screen.blit(ball_1_list[0], ball_1_rect_list[0])
+                if ball_1_animation == 0:
+                    ball_drop_audio.play()
                 ball_1_animation += 0.03
             elif ball_1_animation < 2:
                 screen.blit(ball_1_list[1], ball_1_rect_list[1])
+                if round(ball_1_animation, 2) == 1.02:
+                    ball_drop_audio.play()
                 ball_1_animation += 0.03
             elif ball_1_animation < 3:
                 screen.blit(ball_1_list[2], ball_1_rect_list[2])
+                if round(ball_1_animation, 2) == 2.01:
+                    ball_drop_audio.play()
                 ball_1_animation += 0.03
             elif ball_1_animation < 4:
+                if round(ball_1_animation, 2) == 3.03:
+                    ball_drop_audio.play()
+                    ball_1_animation += 0.03
                 pass
         except: pass
         try:
             if ball_2_animation < 1:
                 screen.blit(ball_2_list[0], ball_2_rect_list[0])
+                if ball_2_animation == 0:
+                    ball_drop_audio.play()
                 ball_2_animation += 0.03
             elif ball_2_animation < 2:
                 screen.blit(ball_2_list[1], ball_2_rect_list[1])
+                if round(ball_2_animation, 2) == 1.02:
+                    ball_drop_audio.play()
                 ball_2_animation += 0.03
             elif ball_2_animation < 3:
                 screen.blit(ball_2_list[2], ball_2_rect_list[2])
+                if round(ball_2_animation, 2) == 2.01:
+                    ball_drop_audio.play()
                 ball_2_animation += 0.03
             elif ball_2_animation < 4:
+                if round(ball_2_animation, 2) == 3.03:
+                    ball_drop_audio.play()
+                    ball_2_animation += 0.03
                 pass            
         except: pass
         try:
             if ball_3_animation < 1:
                 screen.blit(ball_3_list[0], ball_3_rect_list[0])
+                if ball_3_animation == 0:
+                    ball_drop_audio.play()
                 ball_3_animation += 0.03
             elif ball_3_animation < 2:
                 screen.blit(ball_3_list[1], ball_3_rect_list[1])
+                if round(ball_3_animation, 2) == 1.02:
+                    ball_drop_audio.play()
                 ball_3_animation += 0.03
             elif ball_3_animation < 3:
                 screen.blit(ball_3_list[2], ball_3_rect_list[2])
+                if round(ball_3_animation, 2) == 2.01:
+                    ball_drop_audio.play()
                 ball_3_animation += 0.03
             elif ball_3_animation < 4:
+                if round(ball_3_animation, 2) == 3.03:
+                    ball_drop_audio.play()
+                    ball_3_animation += 0.03
                 pass     
         except: pass
 
         try:
             if ball_4_animation < 1:
                 screen.blit(ball_4_list[0], ball_4_rect_list[0])
+                if ball_4_animation == 0:
+                    ball_drop_audio.play()
                 ball_4_animation += 0.03
             elif ball_4_animation < 2:
                 screen.blit(ball_4_list[1], ball_4_rect_list[1])
+                if round(ball_4_animation, 2) == 1.02:
+                    ball_drop_audio.play()
                 ball_4_animation += 0.03
             elif ball_4_animation < 3:
                 screen.blit(ball_4_list[2], ball_4_rect_list[2])
+                if round(ball_4_animation, 2) == 2.01:
+                    ball_drop_audio.play()
                 ball_4_animation += 0.03
             elif ball_4_animation < 4:
+                if round(ball_4_animation, 2) == 3.03:
+                    ball_drop_audio.play()
+                    ball_4_animation += 0.03
                 pass     
         except: pass
 

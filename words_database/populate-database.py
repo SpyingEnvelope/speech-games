@@ -5,7 +5,7 @@ conn = sqlite3.connect('words-database.db')
 c = conn.cursor()
 
 c.execute("""
-    CREATE TABLE h_initial (
+    CREATE TABLE j_initial (
         word text,
         path text
     )
@@ -16,24 +16,24 @@ print('Table successfully created')
 # conn.commit()
 
 many_words = [
-    ('Hand', 'words_database/h-initial/hand.png'),
-    ('Hat', 'words_database/h-initial/hat.png'),
-    ('Heart', 'words_database/h-initial/heart.png'),
-    ('Hen', 'words_database/h-initial/hen.png'),
-    ('Her', 'words_database/h-initial/her.png'),
-    ('Hide', 'words_database/h-initial/hide.png'),
-    ('Hill', 'words_database/h-initial/hill.png'),
-    ('Him', 'words_database/h-initial/him.png'),
-    ('Hockey', 'words_database/h-initial/hockey.png'),
-    ('Hole', 'words_database/h-initial/hole.png'),
-    ('Horse', 'words_database/h-initial/horse.png'),
-    ('Hot', 'words_database/h-initial/hot.png'),
-    ('House', 'words_database/h-initial/house.png'),
-    ('Hug', 'words_database/h-initial/hug.png'),
-    ('Hurt', 'words_database/h-initial/hurt.png')
+    ('Jacket', 'words_database/j-initial/jacket.png'),
+    ('Jam', 'words_database/j-initial/jam.png'),
+    ('Jeans', 'words_database/j-initial/jeans.png'),
+    ('Jewel', 'words_database/j-initial/jewel.png'),
+    ('Juggling', 'words_database/j-initial/juggling.png'),
+    ('Jaguar', 'words_database/j-initial/jaguar.png'),
+    ('Janitor', 'words_database/j-initial/janitor.png'),
+    ('Jelly Beans', 'words_database/j-initial/jellybeans.png'),
+    ('Jingle Bells', 'words_database/j-initial/jinglebells.png'),
+    ('Juice', 'words_database/j-initial/juice.png'),
+    ('Jail', 'words_database/j-initial/jail.png'),
+    ('Jar', 'words_database/j-initial/jar.png'),
+    ('Jet', 'words_database/j-initial/jet.png'),
+    ('Jog', 'words_database/j-initial/jog.png'),
+    ('Jump', 'words_database/j-initial/jump.png')
 ]
 
-c.executemany("INSERT INTO h_initial VALUES (?,?)", many_words)
+c.executemany("INSERT INTO j_initial VALUES (?,?)", many_words)
 print('words and paths successfully added to database')
 
 conn.commit()

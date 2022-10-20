@@ -1,7 +1,7 @@
 from fileinput import close
 from turtle import circle
 import pygame
-from pygame import gfxdraw
+from pygame import K_b, gfxdraw
 from sys import exit
 import tkinter as tk
 import sqlite3
@@ -1052,6 +1052,22 @@ def button_images():
     global h_button_rect
     global i_button_rect
     global j_button_rect
+    global k_button_rect
+    global l_button_rect
+    global m_button_rect
+    global n_button_rect
+    global o_button_rect
+    global p_button_rect
+    global q_button_rect
+    global r_button_rect
+    global s_button_rect
+    global t_button_rect
+    global u_button_rect
+    global v_button_rect
+    global w_button_rect
+    global x_button_rect
+    global y_button_rect
+    global z_button_rect
 
     global letter_selection
     global letter_selection_rect
@@ -1066,6 +1082,22 @@ def button_images():
     global h_letter
     global i_letter
     global j_letter
+    global k_letter
+    global l_letter
+    global m_letter
+    global n_letter
+    global o_letter
+    global p_letter
+    global q_letter
+    global r_letter
+    global s_letter
+    global t_letter
+    global u_letter
+    global v_letter
+    global w_letter
+    global x_letter
+    global y_letter
+    global z_letter
 
     global reward_selection
     global reward_selection_rect
@@ -1094,6 +1126,22 @@ def button_images():
     h_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.07, screen.get_height() * (button_height_position + 0.15)))
     i_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.21, screen.get_height() * (button_height_position + 0.15)))
     j_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.35, screen.get_height() * (button_height_position + 0.15)))
+    k_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.49, screen.get_height() * (button_height_position + 0.15)))
+    l_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.63, screen.get_height() * (button_height_position + 0.15)))
+    m_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.77, screen.get_height() * (button_height_position + 0.15)))
+    n_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.91, screen.get_height() * (button_height_position + 0.15)))
+    o_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.07, screen.get_height() * (button_height_position + 0.30)))
+    p_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.21, screen.get_height() * (button_height_position + 0.30)))
+    q_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.35, screen.get_height() * (button_height_position + 0.30)))
+    r_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.49, screen.get_height() * (button_height_position + 0.30)))
+    s_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.63, screen.get_height() * (button_height_position + 0.30)))
+    t_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.77, screen.get_height() * (button_height_position + 0.30)))
+    u_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.91, screen.get_height() * (button_height_position + 0.30)))
+    v_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.21, screen.get_height() * (button_height_position + 0.45)))
+    w_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.35, screen.get_height() * (button_height_position + 0.45)))
+    x_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.49, screen.get_height() * (button_height_position + 0.45)))
+    y_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.63, screen.get_height() * (button_height_position + 0.45)))
+    z_button_rect = blue_button.get_rect(center = (screen.get_width() * 0.77, screen.get_height() * (button_height_position + 0.45)))
 
     letter_selection = pixel_font_large.render('SELECT A LETTER', False, 'White')
     letter_selection_rect = letter_selection.get_rect(center = (screen.get_width() * 0.5, screen.get_height() * 0.04))
@@ -1107,6 +1155,22 @@ def button_images():
     h_letter = pixel_font_large.render('H', False, 'White')
     i_letter = pixel_font_large.render('I', False, 'White')
     j_letter = pixel_font_large.render('J', False, 'White')
+    k_letter = pixel_font_large.render('K', False, 'White')
+    l_letter = pixel_font_large.render('L', False, 'White')
+    m_letter = pixel_font_large.render('M', False, 'White')
+    n_letter = pixel_font_large.render('N', False, 'White')
+    o_letter = pixel_font_large.render('O', False, 'White')
+    p_letter = pixel_font_large.render('P', False, 'White')
+    q_letter = pixel_font_large.render('Q', False, 'White')
+    r_letter = pixel_font_large.render('R', False, 'White')
+    s_letter = pixel_font_large.render('S', False, 'White')
+    t_letter = pixel_font_large.render('T', False, 'White')
+    u_letter = pixel_font_large.render('U', False, 'White')
+    v_letter = pixel_font_large.render('V', False, 'White')
+    w_letter = pixel_font_large.render('W', False, 'White')
+    x_letter = pixel_font_large.render('X', False, 'White')
+    y_letter = pixel_font_large.render('Y', False, 'White')
+    z_letter = pixel_font_large.render('Z', False, 'White')
 
     ## this section is for reward selection
     reward_selection = pixel_font_large.render('SELECT A REWARD', False, 'White')
@@ -1292,7 +1356,87 @@ while True:
                     words_selector('j_initial')
                     initialize_cariboo()
                     game_state = 'cariboo_reward'
-            
+                
+                if k_button_rect.collidepoint(event.pos):
+                    words_selector('k_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+
+                if l_button_rect.collidepoint(event.pos):
+                    words_selector('l_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+
+                if m_button_rect.collidepoint(event.pos):
+                    words_selector('m_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+
+                if n_button_rect.collidepoint(event.pos):
+                    words_selector('n_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+             
+                if o_button_rect.collidepoint(event.pos):
+                    words_selector('o_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+
+                if p_button_rect.collidepoint(event.pos):
+                    words_selector('p_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+
+                if q_button_rect.collidepoint(event.pos):
+                    words_selector('q_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+
+                if r_button_rect.collidepoint(event.pos):
+                    words_selector('r_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+
+                if s_button_rect.collidepoint(event.pos):
+                    words_selector('s_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+
+                if t_button_rect.collidepoint(event.pos):
+                    words_selector('t_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'                  
+
+                if u_button_rect.collidepoint(event.pos):
+                    words_selector('u_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+
+                if v_button_rect.collidepoint(event.pos):
+                    words_selector('v_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+
+                if w_button_rect.collidepoint(event.pos):
+                    words_selector('w_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+
+                if x_button_rect.collidepoint(event.pos):
+                    words_selector('x_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+
+                if y_button_rect.collidepoint(event.pos):
+                    words_selector('y_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'
+
+                if z_button_rect.collidepoint(event.pos):
+                    words_selector('z_initial')
+                    initialize_cariboo()
+                    game_state = 'cariboo_reward'   
+
             elif game_state == 'cariboo_reward':
                 if trophy_button_rect.collidepoint(event.pos):
                     reward_image('graphics/rewards/trophy.png')
@@ -1335,6 +1479,38 @@ while True:
         screen.blit(i_letter, (screen.get_width() * 0.205, screen.get_height() * 0.255))
         screen.blit(blue_button, j_button_rect)
         screen.blit(j_letter, (screen.get_width() * 0.34, screen.get_height() * 0.255))
+        screen.blit(blue_button, k_button_rect)
+        screen.blit(k_letter, (screen.get_width() * 0.48, screen.get_height() * 0.255))
+        screen.blit(blue_button, l_button_rect)
+        screen.blit(l_letter, (screen.get_width() * 0.62, screen.get_height() * 0.255))
+        screen.blit(blue_button, m_button_rect)
+        screen.blit(m_letter, (screen.get_width() * 0.76, screen.get_height() * 0.255))
+        screen.blit(blue_button, n_button_rect)
+        screen.blit(n_letter, (screen.get_width() * 0.90, screen.get_height() * 0.255))
+        screen.blit(blue_button, o_button_rect)
+        screen.blit(o_letter, (screen.get_width() * 0.06, screen.get_height() * 0.405))
+        screen.blit(blue_button, p_button_rect)
+        screen.blit(p_letter, (screen.get_width() * 0.20, screen.get_height() * 0.405))
+        screen.blit(blue_button, q_button_rect)
+        screen.blit(q_letter, (screen.get_width() * 0.34, screen.get_height() * 0.405))
+        screen.blit(blue_button, r_button_rect)
+        screen.blit(r_letter, (screen.get_width() * 0.48, screen.get_height() * 0.405))
+        screen.blit(blue_button, s_button_rect)
+        screen.blit(s_letter, (screen.get_width() * 0.62, screen.get_height() * 0.405))
+        screen.blit(blue_button, t_button_rect)
+        screen.blit(t_letter, (screen.get_width() * 0.76, screen.get_height() * 0.405))
+        screen.blit(blue_button, u_button_rect)
+        screen.blit(u_letter, (screen.get_width() * 0.90, screen.get_height() * 0.405))
+        screen.blit(blue_button, v_button_rect)
+        screen.blit(v_letter, (screen.get_width() * 0.20, screen.get_height() * 0.555))
+        screen.blit(blue_button, w_button_rect)
+        screen.blit(w_letter, (screen.get_width() * 0.34, screen.get_height() * 0.555))
+        screen.blit(blue_button, x_button_rect)
+        screen.blit(x_letter, (screen.get_width() * 0.48, screen.get_height() * 0.555))
+        screen.blit(blue_button, y_button_rect)
+        screen.blit(y_letter, (screen.get_width() * 0.62, screen.get_height() * 0.555))
+        screen.blit(blue_button, z_button_rect)
+        screen.blit(z_letter, (screen.get_width() * 0.76, screen.get_height() * 0.555))
 
     if game_state == 'cariboo_reward':
         screen.fill((94,129,162))

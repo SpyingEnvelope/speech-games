@@ -4,6 +4,8 @@ conn = sqlite3.connect('words-database.db')
 
 c = conn.cursor()
 
+### PLEASE ENSURE YOU FIRST REMOVE THE TABLE YOU WOULD LIKE TO ADD, THEN RENAME j_initial TO THE NAME OF THE TABLE YOU WOULD LIKE TO ADD
+
 c.execute("""
     CREATE TABLE j_initial (
         word text,

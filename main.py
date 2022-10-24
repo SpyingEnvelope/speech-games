@@ -10,6 +10,7 @@ import math
 from cariboo_game import *
 import main_menu
 from gamestate import set_game_state
+import flash_cards
 
 # init the game
 pygame.init()
@@ -41,6 +42,7 @@ clock = pygame.time.Clock()
 
 # states for game initializing
 cariboo_initialize_state = True
+flash_cards_init_state = True
 
 # set the game_state to decide a game
 initiate_cariboo_circles_text_board()
@@ -54,6 +56,12 @@ while True:
 
     if game_state == 'main_menu':
         main_menu.menu()
+    
+    if game_state == 'flash_init':
+        if flash_cards_init_state:
+            flash_cards.button_images()
+            
+        flash_cards.flash_cards_game()
 
     if game_state == 'cariboo_init':
         cariboo_game()

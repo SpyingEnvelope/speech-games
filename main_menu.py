@@ -55,6 +55,22 @@ btn_border_white = pygame.Surface((cariboo_btn.get_width() * 1.01, cariboo_btn.g
 btn_border_white.fill((255,255,255))
 btn_border_black.fill((0,0,0))
 
+flash_background = pygame.Surface((screen.get_width(), screen.get_height()))
+flash_background.fill((94,129,162))
+
+left_arrow_w = pygame.image.load('graphics/main_menu/left_arrow_white.png').convert_alpha()
+left_arrow_g = pygame.image.load('graphics/main_menu/left_arrow_gray.png')
+right_arrow_w = pygame.image.load('graphics/main_menu/right_arrow_white.png').convert_alpha()
+right_arrow_g = pygame.image.load('graphics/main_menu/right_arrow_gray.png').convert_alpha()
+
+left_arrow_g = pygame.transform.scale(left_arrow_g, (screen.get_width() * 0.04, screen.get_height() * 0.05))
+left_arrow_w = pygame.transform.scale(left_arrow_w, (screen.get_width() * 0.04, screen.get_height() * 0.05))
+right_arrow_g = pygame.transform.scale(right_arrow_g, (screen.get_width() * 0.04, screen.get_height() * 0.05))
+right_arrow_w = pygame.transform.scale(right_arrow_w, (screen.get_width() * 0.04, screen.get_height() * 0.05))
+
+right_arrow_rect = right_arrow_w.get_rect(center = (screen.get_width() * 0.9, screen.get_height() * 0.5))
+left_arrow_rect = left_arrow_g.get_rect(center = (screen.get_width() * 0.1, screen.get_height() * 0.5))
+
 def menu():
     global game_state
     global select_game_text_animation
@@ -74,16 +90,30 @@ def menu():
                 set_game_state('cariboo_init')
     
     screen.blit(cariboo_background_1, (0,0))
-    screen.blit(close_button, close_button_rect)
+    
     screen.blit(btn_border_white, (cariboo_btn_rect.left - (screen.get_width() * 0.003), cariboo_btn_rect.top - (screen.get_height() * 0.003)))
     screen.blit(btn_border_black, (cariboo_btn_rect.left - (screen.get_width() * 0.003), cariboo_btn_rect.top - (screen.get_height() * 0.003)))
     screen.blit(cariboo_btn, cariboo_btn_rect)
-    screen.blit(select_game, select_game_rect)
-    screen.blit(select_game_black, select_game_rect)
     screen.blit(cariboo_text, cariboo_text_rect)
     screen.blit(cariboo_text_black, cariboo_text_rect)
     cariboo_text_black.set_alpha(select_game_text_animation)
+
+    screen.blit(flash_background, (screen.get_width(), 0))
+
+    screen.blit(select_game, select_game_rect)
+    screen.blit(select_game_black, select_game_rect)
+    screen.blit(right_arrow_w, right_arrow_rect)
+    screen.blit(left_arrow_w, left_arrow_rect)
+    screen.blit(right_arrow_g, right_arrow_rect)
+    screen.blit(left_arrow_g, left_arrow_rect)
+    
+
+
     btn_border_black.set_alpha(select_game_text_animation)
+    right_arrow_g.set_alpha(select_game_text_animation)
+    left_arrow_g.set_alpha(select_game_text_animation)
+
+    screen.blit(close_button, close_button_rect)
 
     if select_game_text_state == 'inc':
         select_game_text_animation += 2

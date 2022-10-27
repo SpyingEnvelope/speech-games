@@ -60,6 +60,7 @@ while True:
     if game_state == 'flash_init':
         if flash_cards_init_state:
             flash_cards.button_images()
+            flash_cards_init_state = False
             
         flash_cards.flash_cards_game()
 

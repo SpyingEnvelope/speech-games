@@ -61,7 +61,7 @@ btn_border_white.fill((255,255,255))
 btn_border_black.fill((0,0,0))
 
 flash_background = pygame.Surface((screen.get_width(), screen.get_height()))
-flash_background.fill((94,129,162))
+flash_background.fill((140,183,230))
 flash_background_rect = flash_background.get_rect(topleft = (screen.get_width(), 0))
 
 flash_btn = pygame.image.load('graphics/main_menu/flash_cards.png').convert()
@@ -92,23 +92,112 @@ def move_menu(direction):
     global flash_text_rect
     global flash_btn_rect
 
-    if direction == 'right' and cariboo_background_rect.left == 0:
-        cariboo_background_rect.left -= screen.get_width()
-        cariboo_btn_rect.left -= screen.get_width()
-        cariboo_text_rect.left -= screen.get_width()
+    iteration_add = screen.get_width() / 120
+    loop_end = 0
 
-        flash_background_rect.left -= screen.get_width()
-        flash_text_rect.left -= screen.get_width()
-        flash_btn_rect.left -= screen.get_width()
+    cariboo_bg_pos = cariboo_background_rect.left
+    cariboo_btn_pos = cariboo_btn_rect.left
+    cariboo_text_pos = cariboo_text_rect.left
+
+    flash_bg_pos = flash_background_rect.left
+    flash_text_pos = flash_text_rect.left
+    flash_btn_pos = flash_btn_rect.left
+
+
+    if direction == 'right' and cariboo_background_rect.left == 0:
+        while loop_end <= screen.get_width():
+            if loop_end + iteration_add > screen.get_width() or loop_end + iteration_add == screen.get_width():
+                cariboo_background_rect.left = cariboo_bg_pos - screen.get_width()
+                cariboo_btn_rect.left = cariboo_btn_pos - screen.get_width()
+                cariboo_text_rect.left = cariboo_text_pos - screen.get_width()
+
+                flash_background_rect.left = flash_bg_pos - screen.get_width()
+                flash_text_rect.left = flash_text_pos - screen.get_width()
+                flash_btn_rect.left = flash_btn_pos - screen.get_width()
+
+            else:
+                cariboo_background_rect.left -= iteration_add
+                cariboo_btn_rect.left -= iteration_add
+                cariboo_text_rect.left -= iteration_add
+
+                flash_background_rect.left -= iteration_add
+                flash_text_rect.left -= iteration_add
+                flash_btn_rect.left -= iteration_add
+            
+            screen.blit(cariboo_background_1, cariboo_background_rect)
+            screen.blit(cariboo_btn, cariboo_btn_rect)
+            screen.blit(cariboo_text, cariboo_text_rect)
+            screen.blit(cariboo_text_black, cariboo_text_rect) 
+            cariboo_text_black.set_alpha(200)
+
+            screen.blit(flash_background, flash_background_rect)
+            screen.blit(flash_text, flash_text_rect)
+            screen.blit(flash_text_black, flash_text_rect)
+            flash_text_black.set_alpha(200)
+            screen.blit(flash_btn, flash_btn_rect)
+            
+
+            screen.blit(select_game, select_game_rect)
+            screen.blit(select_game_black, select_game_rect)
+
+            loop_end += iteration_add
+
+            pygame.display.update()
+        # cariboo_background_rect.left -= screen.get_width()
+        # cariboo_btn_rect.left -= screen.get_width()
+        # cariboo_text_rect.left -= screen.get_width()
+
+        # flash_background_rect.left -= screen.get_width()
+        # flash_text_rect.left -= screen.get_width()
+        # flash_btn_rect.left -= screen.get_width()
     
     if direction == 'left' and cariboo_background_rect.left != 0:
-        cariboo_background_rect.left += screen.get_width()
-        cariboo_btn_rect.left += screen.get_width()
-        cariboo_text_rect.left += screen.get_width()
+        while loop_end <= screen.get_width():
+            if loop_end + iteration_add > screen.get_width() or loop_end + iteration_add == screen.get_width():
+                cariboo_background_rect.left = cariboo_bg_pos + screen.get_width()
+                cariboo_btn_rect.left = cariboo_btn_pos + screen.get_width()
+                cariboo_text_rect.left = cariboo_text_pos + screen.get_width()
 
-        flash_background_rect.left += screen.get_width()
-        flash_text_rect.left += screen.get_width()
-        flash_btn_rect.left += screen.get_width()
+                flash_background_rect.left = flash_bg_pos + screen.get_width()
+                flash_text_rect.left = flash_text_pos + screen.get_width()
+                flash_btn_rect.left = flash_btn_pos + screen.get_width()
+
+            else:
+                cariboo_background_rect.left += iteration_add
+                cariboo_btn_rect.left += iteration_add
+                cariboo_text_rect.left += iteration_add
+
+                flash_background_rect.left += iteration_add
+                flash_text_rect.left += iteration_add
+                flash_btn_rect.left += iteration_add
+            
+            screen.blit(cariboo_background_1, cariboo_background_rect)
+            screen.blit(cariboo_btn, cariboo_btn_rect)
+            screen.blit(cariboo_text, cariboo_text_rect)
+            screen.blit(cariboo_text_black, cariboo_text_rect) 
+            cariboo_text_black.set_alpha(200)
+
+            screen.blit(flash_background, flash_background_rect)
+            screen.blit(flash_text, flash_text_rect)
+            screen.blit(flash_text_black, flash_text_rect)
+            flash_text_black.set_alpha(200)
+            screen.blit(flash_btn, flash_btn_rect)
+            
+
+            screen.blit(select_game, select_game_rect)
+            screen.blit(select_game_black, select_game_rect)
+
+            loop_end += iteration_add
+
+            pygame.display.update()
+
+        # cariboo_background_rect.left += screen.get_width()
+        # cariboo_btn_rect.left += screen.get_width()
+        # cariboo_text_rect.left += screen.get_width()
+
+        # flash_background_rect.left += screen.get_width()
+        # flash_text_rect.left += screen.get_width()
+        # flash_btn_rect.left += screen.get_width()
 
 def menu():
     global game_state

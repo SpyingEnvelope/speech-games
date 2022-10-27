@@ -392,7 +392,7 @@ def flash_cards_game():
 
 
     if flash_game_state == 'flash_init':
-        screen.fill((94,129,162))
+        screen.fill((140,183,230))
         screen.blit(letter_selection, letter_selection_rect)
         screen.blit(blue_button, a_button_rect)
         screen.blit(a_letter, (screen.get_width() * 0.06, screen.get_height() * 0.1))
@@ -448,7 +448,7 @@ def flash_cards_game():
         screen.blit(z_letter, (screen.get_width() * 0.76, screen.get_height() * 0.555))
     
     if flash_game_state == 'flash_cards':
-        screen.fill((94,129,162))
+        screen.fill((140,183,230))
         print(flash_cards_list)
         screen.blit(flash_cards_list[random_picture_selector], flash_cards_list[15])
     

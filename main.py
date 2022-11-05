@@ -22,7 +22,7 @@ screen_height = root.winfo_screenheight()
 
 # set display size
 if screen_height == 1440:
-    screen = pygame.display.set_mode((2560, 1440))
+    screen = pygame.display.set_mode((2560, 1440), pygame.FULLSCREEN)
 if screen_height == 2160:
     screen = pygame.display.set_mode((3840, 2160), pygame.FULLSCREEN)
 if screen_height == 1080:

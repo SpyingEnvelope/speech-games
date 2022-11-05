@@ -6,11 +6,11 @@ from sys import exit
 import tkinter as tk
 import sqlite3
 from random import randint
-import math
 from cariboo_game import *
 import main_menu
 from gamestate import set_game_state
 import flash_cards
+import intro
 
 # init the game
 pygame.init()
@@ -44,7 +44,7 @@ clock = pygame.time.Clock()
 cariboo_initialize_state = True
 flash_cards_init_state = True
 
-# set the game_state to decide a game
+# initiate everything for the game cariboo
 initiate_cariboo_circles_text_board()
 button_images()
 initiate_menu_buttons()
@@ -53,6 +53,9 @@ initiate_cariboo_state()
 while True: 
     # import the game state with every iteration in order to check for changes in the game_state
     from gamestate import game_state
+
+    if game_state == 'intro':
+        intro.intro_screen()
 
     if game_state == 'main_menu':
         main_menu.menu()

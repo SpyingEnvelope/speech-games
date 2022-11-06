@@ -2,6 +2,7 @@ import pygame
 import sqlite3
 import tkinter as tk
 from gamestate import *
+from sys import exit
 
 root = tk.Tk()
 

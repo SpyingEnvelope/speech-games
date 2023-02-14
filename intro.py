@@ -25,7 +25,7 @@ elif screen_height == 360:
 elif screen_height == 240:
     screen = pygame.display.set_mode((426, 240), pygame.FULLSCREEN)
 else:
-    screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
 lucky_font_large = pygame.font.Font('fonts/pixel/Pixeltype.ttf', int(screen.get_width() * 0.10))
 se_font = lucky_font_large.render('SpyingEnvelope', True, (255,255,255))

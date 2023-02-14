@@ -30,7 +30,7 @@ elif screen_height == 360:
 elif screen_height == 240:
     screen = pygame.display.set_mode((426, 240), pygame.FULLSCREEN)
 else:
-    screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
 cariboo_btn = pygame.image.load('graphics/main_menu/cariboo.png').convert()
 cariboo_btn = pygame.transform.scale(cariboo_btn, (screen.get_width() * 0.65, screen.get_height() * 0.65))

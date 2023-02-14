@@ -36,7 +36,7 @@ elif screen_height == 360:
 elif screen_height == 240:
     screen = pygame.display.set_mode((426, 240), pygame.FULLSCREEN)
 else:
-    screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     
 pygame.display.set_caption('Speech Games')
 

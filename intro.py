@@ -12,18 +12,20 @@ pygame.init()
 # set display size
 if screen_height == 1440:
     screen = pygame.display.set_mode((2560, 1440), pygame.FULLSCREEN)
-if screen_height == 2160:
+elif screen_height == 2160:
     screen = pygame.display.set_mode((3840, 2160), pygame.FULLSCREEN)
-if screen_height == 1080:
+elif screen_height == 1080:
     screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
-if screen_height == 720:
+elif screen_height == 720:
     screen = pygame.display.set_mode((1280, 720), pygame.FULLSCREEN)
-if screen_height == 480:
+elif screen_height == 480:
     screen = pygame.display.set_mode((854, 480), pygame.FULLSCREEN)
-if screen_height == 360:
+elif screen_height == 360:
     screen = pygame.display.set_mode((640, 360), pygame.FULLSCREEN)
-if screen_height == 240:
+elif screen_height == 240:
     screen = pygame.display.set_mode((426, 240), pygame.FULLSCREEN)
+else:
+    screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
 
 lucky_font_large = pygame.font.Font('fonts/pixel/Pixeltype.ttf', int(screen.get_width() * 0.10))
 se_font = lucky_font_large.render('SpyingEnvelope', True, (255,255,255))

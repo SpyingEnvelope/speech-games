@@ -1,4 +1,5 @@
 # The Speech Games
+![An image of Cariboo in The Speech Games](speech_image.png "An image of The Speech Games running")
 The Speech Games is an interactive game built in Python using the Pygame library. It’s designed to support speech therapy sessions with children, helping them practice specific words in a fun and engaging way.
 
 The main game, Cariboo, features panels displaying images of various objects. A child must correctly say the word shown on a panel before clicking to open it. If a ball is hidden behind the panel, it appears on the right side of the screen. Once all four balls are found, the game concludes with a reward animation, adding excitement and motivation.
